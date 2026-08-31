@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>84 Buddhist English Words — 200 Interactive Exercises</title>
+<style>
+:root {
+  --bg:#f6f3eb; --card:#fdfbf7; --ink:#2c241b; --muted:#756b5f;
+  --accent:#8b2b22; --accent2:#6d211a; --border:#d4cbb8; --good:#2e6b3e;
+  --bad:#a1392f; --soft:#efe8dc; --gold:#a67c32;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif;line-height:1.55}
+.wrap{max-width:920px;margin:0 auto;padding:28px 16px 56px}
+.hero{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:28px;box-shadow:0 12px 30px rgba(60,40,20,.08);position:relative;overflow:hidden}
+.hero:before{content:"🌿";position:absolute;right:22px;top:16px;font-size:34px;opacity:.7}
+.kicker{letter-spacing:.16em;color:var(--accent);font-weight:800;font-size:.78rem}
+h1{font-family:Georgia,serif;margin:8px 0 6px;font-size:clamp(1.8rem,5vw,3rem);line-height:1.1}
+.sub{color:var(--muted);max-width:720px}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.pill{background:var(--soft);border:1px solid var(--border);padding:7px 11px;border-radius:999px;font-size:.9rem}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+button{font:inherit;border:none;border-radius:12px;padding:10px 15px;cursor:pointer;transition:.15s}
+button:hover{transform:translateY(-1px)}
+.primary{background:var(--accent);color:white}
+.secondary{background:var(--card);border:1px solid var(--border);color:var(--ink)}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.progress-shell{height:10px;background:#e8dfd0;border-radius:999px;overflow:hidden;margin:18px 0 8px}
+.progress{height:100%;width:0;background:var(--accent);transition:.25s}
+.meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-top:18px;box-shadow:0 10px 24px rgba(60,40,20,.07)}
+.qtype{color:var(--accent);font-weight:800;font-size:.78rem;letter-spacing:.09em;text-transform:uppercase}
+.wordline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}
+.word{font-family:Georgia,serif;font-size:1.55rem;font-weight:700}
+.ipa{color:var(--muted)}
+.audio{width:42px;height:42px;padding:0;border-radius:50%;background:var(--soft);border:1px solid var(--border);font-size:1.15rem}
+.question{font-size:1.15rem;font-weight:650;margin:16px 0}
+.options{display:grid;gap:10px}
+.opt{text-align:left;background:white;border:1px solid var(--border);padding:12px 14px}
+.opt.correct{border-color:var(--good);background:#eef7ef}
+.opt.wrong{border-color:var(--bad);background:#fbefed}
+.inputrow{display:flex;gap:10px;flex-wrap:wrap}
+input[type=text]{flex:1;min-width:220px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);font:inherit;background:white}
+.feedback{display:none;margin-top:18px;padding:16px;border-radius:14px;background:#f1ece3;border-left:5px solid var(--gold)}
+.feedback.show{display:block}
+.feedback.good{border-left-color:var(--good)}
+.feedback.bad{border-left-color:var(--bad)}
+.answer{font-weight:800}
+.note{margin-top:8px;color:#544b40}
+.example{margin-top:8px;font-style:italic}
+.nextrow{display:flex;justify-content:flex-end;margin-top:18px}
+.end{display:none;text-align:center}
+.end h2{font-family:Georgia,serif;font-size:2rem}
+.scorebig{font-size:3.4rem;font-weight:900;color:var(--accent)}
+.legend{margin-top:18px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.small{font-size:.88rem;color:var(--muted)}
+@media(max-width:600px){.hero,.card{padding:18px} .meta{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="kicker">BUDDHIST ENGLISH • 84 TỪ</div>
+    <h1>200 bài tập từ vựng tương tác</h1>
+    <div class="sub">Luyện nghĩa, nhận diện từ, ngữ cảnh Phật học, chính tả và đúng/sai. Mỗi câu đều có nút 🔊 để nghe từ/cụm từ bằng giọng đọc tiếng Anh của trình duyệt.</div>
+    <div class="stats">
+      <span class="pill">84 mục từ</span>
+      <span class="pill">200 câu</span>
+      <span class="pill">5 dạng bài</span>
+      <span class="pill">Có ghi chú Phật học sau đáp án</span>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <button class="primary" id="restartBtn">↻ Làm lại 200 câu</button>
+    <button class="secondary" id="wrongBtn" disabled>Ôn lại câu sai</button>
+    <button class="secondary" id="vocabBtn">Xem danh sách 84 từ</button>
+  </div>
+
+  <div class="progress-shell"><div class="progress" id="progress"></div></div>
+  <div class="meta">
+    <span id="counter">Câu 1 / 200</span>
+    <span id="score">Đúng: 0 • Sai: 0</span>
+  </div>
+
+  <section class="card" id="quizCard">
+    <div class="qtype" id="qtype"></div>
+    <div class="wordline">
+      <span class="word" id="wordLabel"></span>
+      <span class="ipa" id="ipaLabel"></span>
+      <button class="audio" id="audioBtn" title="Nghe phát âm">🔊</button>
+    </div>
+    <div class="question" id="question"></div>
+    <div id="answerArea"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nextrow"><button class="primary" id="nextBtn" disabled>Câu tiếp theo →</button></div>
+  </section>
+
+  <section class="card end" id="endCard">
+    <h2>Hoàn thành!</h2>
+    <div class="scorebig" id="finalScore"></div>
+    <p id="finalText"></p>
+    <div class="toolbar" style="justify-content:center">
+      <button class="primary" id="againBtn">Làm lại toàn bộ</button>
+      <button class="secondary" id="reviewWrongBtn">Ôn câu sai</button>
+    </div>
+  </section>
+
+  <section class="legend">
+    <b>Gợi ý học:</b> Sau khi trả lời, đừng chỉ nhìn đúng/sai. Hãy đọc lại <b>câu ví dụ</b> và <b>ghi chú Phật học/collocation</b>; đó là phần giúp nhớ cách dùng từ trong Dhamma English.
+    <div class="small">Âm thanh dùng Speech Synthesis của trình duyệt. Chrome/Edge thường hoạt động tốt nhất. Bạn có thể bấm 🔊 nhiều lần.</div>
+  </section>
+
+  <section class="card" id="vocabCard" style="display:none">
+    <h2 style="font-family:Georgia,serif">Danh sách 84 mục từ</h2>
+    <div id="vocabList"></div>
+  </section>
+</div>
+
+<script>
+const VOCAB = [{"w": "condense", "ipa": "/kənˈdens/", "pos": "v.", "meaning": "cô đọng; rút gọn; làm ngưng tụ", "example": "A teacher may condense a long Dhamma explanation into a few essential principles.", "note": "Trong văn phong học thuật, condense thường dùng khi rút một phần trình bày dài thành phần cốt lõi."}, {"w": "inhabit", "ipa": "/ɪnˈhæbɪt/", "pos": "v.", "meaning": "cư trú; sinh sống ở", "example": "According to Buddhist cosmology, many classes of beings inhabit different planes of existence.", "note": "Có thể gặp trong mô tả các cõi: beings inhabit a realm = chúng sinh cư trú trong một cõi."}, {"w": "visualization", "ipa": "/ˌvɪʒuələˈzeɪʃən/", "pos": "n.", "meaning": "sự hình dung; quán tưởng", "example": "Visualization may be used as a supporting technique in some meditation traditions.", "note": "Trong thiền học, visualization gần với việc tạo và duy trì một hình ảnh trong tâm; không phải mọi pháp thiền Theravāda đều dùng kỹ thuật này."}, {"w": "vague", "ipa": "/veɪɡ/", "pos": "adj.", "meaning": "mơ hồ; không rõ ràng", "example": "A vague understanding of the Four Noble Truths is not the same as direct insight.", "note": "Cụm hay gặp: vague idea, vague understanding, vague impression."}, {"w": "whetstone", "ipa": "/ˈwetstoʊn/", "pos": "n.", "meaning": "đá mài", "example": "Just as a whetstone sharpens a blade, careful investigation sharpens wisdom.", "note": "Từ cụ thể, thường phù hợp với ví dụ ẩn dụ về sự rèn luyện tâm hay trí tuệ."}, {"w": "sword", "ipa": "/sɔːrd/", "pos": "n.", "meaning": "thanh kiếm", "example": "Wisdom is sometimes compared to a sword that cuts through delusion.", "note": "Cụm ẩn dụ quen thuộc: the sword of wisdom = thanh kiếm trí tuệ."}, {"w": "pierce", "ipa": "/pɪrs/", "pos": "v.", "meaning": "xuyên thủng; thấu suốt", "example": "Penetrative wisdom can pierce through the appearance of permanence.", "note": "Trong Buddhist English, pierce through có thể diễn tả trí tuệ thấu suốt lớp biểu hiện bề ngoài."}, {"w": "compact", "ipa": "/kəmˈpækt/", "pos": "adj./v.", "meaning": "chặt, đặc; nhỏ gọn; nén lại", "example": "What appears compact can be analyzed into changing mental and material phenomena.", "note": "Liên hệ với compactness: cảm giác về một khối nguyên vẹn có thể bị phân tích bằng tuệ quán."}, {"w": "subatomic", "ipa": "/ˌsʌbəˈtɑːmɪk/", "pos": "adj.", "meaning": "hạ nguyên tử", "example": "Subatomic particles belong to modern physics rather than the classical Abhidhamma framework.", "note": "Nên phân biệt thuật ngữ khoa học hiện đại với các phạm trù rūpa trong Abhidhamma."}, {"w": "particle", "ipa": "/ˈpɑːrtɪkəl/", "pos": "n.", "meaning": "hạt; tiểu phần", "example": "A physical particle is a scientific concept and should not automatically be equated with a rūpa-kalāpa.", "note": "Khi đọc sách Phật học hiện đại, cần thận trọng với việc đồng nhất particle với thuật ngữ Vi Diệu Pháp."}, {"w": "isolate", "ipa": "/ˈaɪsəleɪt/", "pos": "v.", "meaning": "tách riêng; cô lập", "example": "For analysis, a teacher may isolate one mental factor and examine its function.", "note": "Cấu trúc: isolate A from B = tách A khỏi B."}, {"w": "radically", "ipa": "/ˈrædɪkli/", "pos": "adv.", "meaning": "một cách căn bản; triệt để", "example": "Insight into non-self can radically change how one relates to experience.", "note": "Radically thường bổ nghĩa cho change, differ, transform."}, {"w": "fetter", "ipa": "/ˈfetər/", "pos": "n./v.", "meaning": "kiết sử; sự trói buộc; trói buộc", "example": "Stream-entry permanently eradicates the first three fetters.", "note": "Trong Phật học, fetter thường dịch Pāḷi saṃyojana, đặc biệt trong cụm ten fetters."}, {"w": "obstacle", "ipa": "/ˈɑːbstəkəl/", "pos": "n.", "meaning": "chướng ngại; trở ngại", "example": "Restlessness can become an obstacle to stable concentration.", "note": "Cụm: an obstacle to concentration/practice/progress."}, {"w": "bisect", "ipa": "/baɪˈsekt/", "pos": "v.", "meaning": "chia đôi; cắt thành hai phần", "example": "Conceptual analysis may bisect a process for explanation, although experience itself unfolds continuously.", "note": "Từ học thuật; bi- mang nghĩa hai, -sect liên quan đến cắt/chia."}, {"w": "cowherd", "ipa": "/ˈkaʊhɜːrd/", "pos": "n.", "meaning": "người chăn bò", "example": "The Dhammapada compares one who merely recites teachings without practice to a cowherd counting others' cattle.", "note": "Cowherd xuất hiện trong các bản dịch kể chuyện hay ví dụ kinh điển."}, {"w": "prerequisite", "ipa": "/ˌpriːˈrekwəzɪt/", "pos": "n./adj.", "meaning": "điều kiện tiên quyết; cần có trước", "example": "Moral discipline is an important prerequisite for the development of deep concentration.", "note": "Cấu trúc rất nên nhớ: a prerequisite for + noun/V-ing."}, {"w": "velocity", "ipa": "/vəˈlɑːsəti/", "pos": "n.", "meaning": "vận tốc; tốc độ theo hướng", "example": "The velocity of material objects is a concern of physics, not a direct category of Abhidhamma analysis.", "note": "Velocity là thuật ngữ vật lý; trong văn học Phật giáo thường chỉ xuất hiện khi so sánh với khoa học."}, {"w": "strict", "ipa": "/strɪkt/", "pos": "adj.", "meaning": "nghiêm ngặt; chặt chẽ", "example": "A strict observance of the monastic discipline can support heedfulness.", "note": "Cụm: strict observance of rules/discipline."}, {"w": "prematurely", "ipa": "/ˌpriːməˈtʃʊrli/", "pos": "adv.", "meaning": "quá sớm; trước thời điểm thích hợp", "example": "A meditator should not prematurely assume that a peaceful experience is a noble attainment.", "note": "Thường dùng với conclude, assume, stop, declare."}, {"w": "utilize", "ipa": "/ˈjuːtəlaɪz/", "pos": "v.", "meaning": "sử dụng; tận dụng", "example": "A skilled teacher may utilize suitable similes to clarify subtle Dhamma points.", "note": "Utilize trang trọng hơn use, nhưng trong văn viết đơn giản use thường tự nhiên hơn."}, {"w": "transcendent", "ipa": "/trænˈsendənt/", "pos": "adj.", "meaning": "siêu việt; vượt khỏi", "example": "Nibbāna is described as transcendent to conditioned existence.", "note": "Trong Buddhist English, cần phân biệt transcendent với transcendental tùy văn cảnh và truyền thống dịch."}, {"w": "odor", "ipa": "/ˈoʊdər/", "pos": "n.", "meaning": "mùi; mùi hương", "example": "Mindfulness can clearly know an odor simply as an object of the nose-consciousness process.", "note": "Trong sáu trần, odor có thể dùng cho gandha = hương/mùi."}, {"w": "snare", "ipa": "/sner/", "pos": "n./v.", "meaning": "cái bẫy; cạm bẫy; mắc bẫy", "example": "Craving is like a snare that keeps beings bound to repeated existence.", "note": "Một từ giàu hình ảnh, thường dùng ẩn dụ cho tham ái và sự trói buộc."}, {"w": "searchlight", "ipa": "/ˈsɜːrtʃlaɪt/", "pos": "n.", "meaning": "đèn pha; luồng sáng tìm kiếm", "example": "Focused attention can be compared to a searchlight directed toward a single meditation object.", "note": "Ẩn dụ hữu ích để phân biệt sự chú ý tập trung với nhận biết rộng."}, {"w": "ultrapowerful", "ipa": "/ˌʌltrəˈpaʊərfəl/", "pos": "adj.", "meaning": "cực kỳ mạnh; siêu mạnh", "example": "Buddhist practice does not depend on imagining an ultrapowerful permanent self.", "note": "Đây là từ ghép hiện đại, ít gặp trong văn Phật học chuẩn; nên nhận diện nghĩa hơn là ưu tiên dùng."}, {"w": "emit", "ipa": "/iˈmɪt/", "pos": "v.", "meaning": "phát ra; tỏa ra", "example": "A lamp may emit light, just as wholesome conduct can metaphorically illuminate one's life.", "note": "Cấu trúc: emit light/heat/radiation/sound."}, {"w": "microscopic", "ipa": "/ˌmaɪkrəˈskɑːpɪk/", "pos": "adj.", "meaning": "vi mô; cực nhỏ; chỉ thấy qua kính hiển vi", "example": "Microscopic observation belongs to empirical science and is distinct from insight meditation.", "note": "Nên tránh đồng nhất microscopic observation với trực giác thiền định."}, {"w": "coarse", "ipa": "/kɔːrs/", "pos": "adj.", "meaning": "thô; thô trọng; thô tháo", "example": "Coarse mental states become easier to recognize when mindfulness is well established.", "note": "Cụm nên nhớ: coarse mental states / coarse defilements."}, {"w": "dissolve", "ipa": "/dɪˈzɑːlv/", "pos": "v.", "meaning": "tan rã; phân rã; hòa tan", "example": "In insight practice, formations may appear to dissolve rapidly from moment to moment.", "note": "Trong mô tả vipassanā, dissolve/dissolution thường gợi tiến trình tan rã của các pháp hữu vi."}, {"w": "intrinsic", "ipa": "/ɪnˈtrɪnsɪk/", "pos": "adj.", "meaning": "nội tại; vốn có; thuộc bản chất", "example": "Conditioned phenomena are not regarded as possessing an intrinsic permanent self.", "note": "Cụm hay gặp: intrinsic nature, intrinsic value, intrinsic existence."}, {"w": "launchpad", "ipa": "/ˈlɔːntʃpæd/", "pos": "n.", "meaning": "bàn đạp; nền tảng để tiến xa hơn", "example": "Strong concentration can serve as a launchpad for the development of insight.", "note": "Cấu trúc: serve as a launchpad for + noun/V-ing."}, {"w": "resolution", "ipa": "/ˌrezəˈluːʃən/", "pos": "n.", "meaning": "quyết tâm; sự giải quyết; độ phân giải", "example": "The meditator made a firm resolution to maintain mindfulness throughout the retreat.", "note": "Trong ngữ cảnh tu tập: make a firm resolution = phát quyết tâm mạnh mẽ."}, {"w": "distortion", "ipa": "/dɪˈstɔːrʃən/", "pos": "n.", "meaning": "sự bóp méo; nhận thức sai lệch", "example": "Attachment can produce a distortion of perception and judgment.", "note": "Trong Phật học có thể liên hệ với vipallāsa: distortions/perversions of perception, thought, and view."}, {"w": "yoke", "ipa": "/joʊk/", "pos": "n./v.", "meaning": "ách; sự ràng buộc; đặt dưới ách", "example": "Beings remain yoked to saṃsāra through craving and ignorance.", "note": "Cụm giàu tính ẩn dụ: be yoked to saṃsāra."}, {"w": "precede", "ipa": "/prɪˈsiːd/", "pos": "v.", "meaning": "đi trước; xảy ra trước", "example": "Right view can precede and guide the development of the other path factors.", "note": "Precede là ngoại động từ: precede something, không dùng precede to."}, {"w": "optimal", "ipa": "/ˈɑːptɪməl/", "pos": "adj.", "meaning": "tối ưu; tốt nhất trong điều kiện", "example": "A quiet and balanced environment provides optimal conditions for intensive meditation.", "note": "Cụm: optimal conditions for practice/performance."}, {"w": "woeful", "ipa": "/ˈwoʊfəl/", "pos": "adj.", "meaning": "đau khổ; khốn khổ; thuộc khổ cảnh", "example": "Unwholesome kamma may lead to rebirth in a woeful realm.", "note": "Cụm Buddhist English: woeful realm/state = khổ cảnh, ác thú."}, {"w": "obscurity", "ipa": "/əbˈskjʊrəti/", "pos": "n.", "meaning": "sự tối tăm; mơ hồ; khó hiểu", "example": "Ignorance keeps the true nature of conditioned phenomena in obscurity.", "note": "Obscurity là danh từ của obscure trong một số nghĩa."}, {"w": "literal", "ipa": "/ˈlɪtərəl/", "pos": "adj.", "meaning": "theo nghĩa đen; sát chữ", "example": "A literal translation of a Pāḷi passage may fail to convey its full doctrinal nuance.", "note": "Cụm quan trọng: literal meaning / literal translation."}, {"w": "quintessential", "ipa": "/ˌkwɪntɪˈsenʃəl/", "pos": "adj.", "meaning": "tinh túy nhất; điển hình nhất", "example": "The Noble Eightfold Path is a quintessential expression of Buddhist practice.", "note": "Quintessential thường đứng trước danh từ để chỉ mẫu mực/tinh túy tiêu biểu."}, {"w": "illuminate", "ipa": "/ɪˈluːməneɪt/", "pos": "v.", "meaning": "soi sáng; làm sáng tỏ", "example": "Wisdom can illuminate the conditioned nature of experience.", "note": "Có nghĩa đen 'chiếu sáng' và nghĩa bóng 'làm sáng tỏ'."}, {"w": "sustain", "ipa": "/səˈsteɪn/", "pos": "v.", "meaning": "duy trì; giữ vững; chống đỡ", "example": "Continuous mindfulness helps sustain concentration during meditation.", "note": "Cụm: sustain attention/concentration/effort."}, {"w": "restrict", "ipa": "/rɪˈstrɪkt/", "pos": "v.", "meaning": "hạn chế; giới hạn", "example": "Training rules restrict conduct that may lead to heedlessness or harm.", "note": "Cấu trúc: restrict something; restrict A to B."}, {"w": "celestial", "ipa": "/səˈlestʃəl/", "pos": "adj.", "meaning": "thuộc cõi trời; thiên giới", "example": "Some wholesome kamma may support rebirth among celestial beings.", "note": "Cụm: celestial beings = chư thiên."}, {"w": "luminescence", "ipa": "/ˌluːməˈnesəns/", "pos": "n.", "meaning": "sự phát sáng; ánh sáng phát ra", "example": "Some meditation reports describe unusual luminescence during periods of strong concentration.", "note": "Luminescence nhấn vào hiện tượng phát sáng; luminosity nhấn vào tính/độ sáng."}, {"w": "nocturnal", "ipa": "/nɑːkˈtɜːrnəl/", "pos": "adj.", "meaning": "thuộc ban đêm; hoạt động về đêm", "example": "Nocturnal meditation is common during periods of intensive practice.", "note": "Cụm: nocturnal activity, nocturnal practice."}, {"w": "dim", "ipa": "/dɪm/", "pos": "adj./v.", "meaning": "mờ; tối; làm mờ", "example": "When mindfulness weakens, awareness may become dim and unclear.", "note": "Dim có thể là tính từ hoặc động từ: dim light; the light dims."}, {"w": "terrestrial", "ipa": "/təˈrestriəl/", "pos": "adj.", "meaning": "thuộc mặt đất; trên địa cầu", "example": "Buddhist cosmological narratives mention both terrestrial and celestial beings.", "note": "Thường đối lập terrestrial với celestial."}, {"w": "synthesis", "ipa": "/ˈsɪnθəsɪs/", "pos": "n.", "meaning": "sự tổng hợp; kết hợp", "example": "The gradual training may be presented as a synthesis of morality, concentration, and wisdom.", "note": "Cụm: a synthesis of A and B / a synthesis of several elements."}, {"w": "luminosity", "ipa": "/ˌluːməˈnɑːsəti/", "pos": "n.", "meaning": "độ sáng; tính sáng chói", "example": "Some Buddhist discussions use luminosity as a metaphor when speaking about the clarity of mind.", "note": "Phân biệt với luminescence; luminosity là tính chất/độ sáng."}, {"w": "infinite", "ipa": "/ˈɪnfənət/", "pos": "adj.", "meaning": "vô hạn; vô biên", "example": "The base of infinite space is the first immaterial attainment in the standard fourfold sequence.", "note": "Cụm Phật học: infinite space, infinite consciousness."}, {"w": "lantern", "ipa": "/ˈlæntərn/", "pos": "n.", "meaning": "đèn lồng; ngọn đèn", "example": "Just as a lantern dispels darkness, wisdom dispels ignorance.", "note": "Từ dễ dùng trong ẩn dụ về trí tuệ và vô minh."}, {"w": "expose", "ipa": "/ɪkˈspoʊz/", "pos": "v.", "meaning": "phơi bày; làm lộ ra; đặt vào tình trạng tiếp xúc", "example": "Insight can expose the impermanent and conditioned nature of experience.", "note": "Cấu trúc: expose the nature of...; expose someone to..."}, {"w": "shatter", "ipa": "/ˈʃætər/", "pos": "v.", "meaning": "phá vỡ; làm tan vỡ; đập tan", "example": "Insight into impermanence can shatter the illusion of permanence.", "note": "Cụm nên nhớ: shatter the illusion of..."}, {"w": "distorted", "ipa": "/dɪˈstɔːrtɪd/", "pos": "adj.", "meaning": "bị bóp méo; sai lệch", "example": "Craving may give rise to a distorted perception of reality.", "note": "Cụm: a distorted perception/view/image of..."}, {"w": "obscure", "ipa": "/əbˈskjʊr/", "pos": "v./adj.", "meaning": "che khuất; làm lu mờ; mơ hồ, khó hiểu", "example": "The five hindrances obscure the mind's ability to see clearly.", "note": "Obscure vừa là động từ 'che khuất' vừa là tính từ 'khó hiểu/ít được biết'."}, {"w": "compactness", "ipa": "/kəmˈpæktnəs/", "pos": "n.", "meaning": "tính đặc chắc; tính nguyên khối", "example": "Insight practice may break down the perception of compactness in experience.", "note": "Trong một số sách vipassanā, compactness liên hệ với ghana, cảm giác về một khối nguyên vẹn."}, {"w": "dominance", "ipa": "/ˈdɑːmɪnəns/", "pos": "n.", "meaning": "sự chi phối; ưu thế; thống trị", "example": "Under the dominance of craving, beings continue to seek gratification.", "note": "Cụm: under the dominance of..."}, {"w": "dissect", "ipa": "/dɪˈsekt/", "pos": "v.", "meaning": "mổ xẻ; phân tích thành từng phần", "example": "Abhidhamma texts dissect experience into distinct categories for analytical purposes.", "note": "Cấu trúc: dissect something into parts/categories."}, {"w": "rigid", "ipa": "/ˈrɪdʒɪd/", "pos": "adj.", "meaning": "cứng; cứng nhắc; không linh hoạt", "example": "A practitioner should avoid becoming rigid in the application of a meditation technique.", "note": "Cụm: rigid in one's approach to..."}, {"w": "delude", "ipa": "/dɪˈluːd/", "pos": "v.", "meaning": "đánh lừa; làm mê lầm", "example": "Attachment can delude us into believing that impermanent things will last.", "note": "Cấu trúc quan trọng: delude someone into believing/thinking that..."}, {"w": "immutable", "ipa": "/ɪˈmjuːtəbəl/", "pos": "adj.", "meaning": "bất biến; không thể thay đổi", "example": "No conditioned phenomenon is permanent and immutable.", "note": "Immutable thường đi với permanent, fixed, unchanging."}, {"w": "consecutive", "ipa": "/kənˈsekjətɪv/", "pos": "adj.", "meaning": "liên tiếp; kế tiếp nhau", "example": "The meditator maintained the practice for seven consecutive days.", "note": "Cụm: consecutive days/weeks/sessions."}, {"w": "aggregation", "ipa": "/ˌæɡrɪˈɡeɪʃən/", "pos": "n.", "meaning": "sự tập hợp; sự kết tụ", "example": "A 'person' may be analyzed conventionally as an aggregation of physical and mental processes.", "note": "Cụm: an aggregation of..."}, {"w": "intertwining", "ipa": "/ˌɪntərˈtwaɪnɪŋ/", "pos": "n./adj.", "meaning": "sự đan xen; quyện vào nhau", "example": "Dependent processes reveal a complex intertwining of causes and conditions.", "note": "Cụm: the intertwining of A and B."}, {"w": "entity", "ipa": "/ˈentəti/", "pos": "n.", "meaning": "thực thể; hữu thể; đơn vị tồn tại", "example": "The teaching of non-self rejects the idea of a permanent independent entity behind the aggregates.", "note": "Cụm: a permanent/independent entity."}, {"w": "synchronize", "ipa": "/ˈsɪŋkrənaɪz/", "pos": "v.", "meaning": "đồng bộ hóa; phối hợp cho cùng nhịp", "example": "During walking meditation, one may synchronize awareness with bodily movement.", "note": "Cấu trúc: synchronize A with B."}, {"w": "conventional", "ipa": "/kənˈvenʃənəl/", "pos": "adj.", "meaning": "quy ước; thông thường; thuộc tục đế", "example": "Terms such as 'person' and 'being' function at the conventional level of discourse.", "note": "Cụm Phật học: conventional truth / conventional level."}, {"w": "Unification of mind", "ipa": "/ˌjuːnɪfɪˈkeɪʃən əv maɪnd/", "pos": "n. phrase", "meaning": "sự nhất tâm; sự hợp nhất của tâm", "example": "Unification of mind becomes stronger as attention remains steadily with the meditation object.", "note": "Cụm này thường được dùng để giải thích ekaggatā hoặc trạng thái tâm quy tụ, tùy ngữ cảnh dịch."}, {"w": "Distraction", "ipa": "/dɪˈstrækʃən/", "pos": "n.", "meaning": "sự xao lãng; phóng tâm", "example": "Distraction repeatedly pulls attention away from the meditation object.", "note": "Cụm: freedom from distraction; overcome distraction."}, {"w": "Conascent", "ipa": "/koʊˈnæsənt/", "pos": "adj.", "meaning": "đồng sinh; cùng sinh khởi", "example": "In Abhidhamma, conascent mental factors arise together with consciousness.", "note": "Conascent thường dịch sahajāta = đồng sinh."}, {"w": "Securely", "ipa": "/sɪˈkjʊrli/", "pos": "adv.", "meaning": "một cách vững chắc; an toàn", "example": "Mindfulness should be securely established before subtle mental processes are examined.", "note": "Cụm: securely established = được thiết lập vững chắc."}, {"w": "Concrete", "ipa": "/ˈkɑːnkriːt/", "pos": "adj.", "meaning": "cụ thể; hữu hình; rõ ràng", "example": "A concrete example can make an abstract Dhamma principle easier to understand.", "note": "Đối lập thường gặp: concrete vs. abstract."}, {"w": "Roaring", "ipa": "/ˈrɔːrɪŋ/", "pos": "adj./n.", "meaning": "gầm vang; tiếng gầm", "example": "The Buddha's fearless proclamation of the Dhamma is sometimes compared to a roaring lion.", "note": "Cụm hình ảnh: roaring lion / lion's roar."}, {"w": "Steadfastness", "ipa": "/ˈstedfæstnəs/", "pos": "n.", "meaning": "sự kiên định; vững vàng", "example": "Steadfastness in wholesome practice helps one continue despite difficulty.", "note": "Liên hệ với sự kiên trì, quyết tâm và không bỏ cuộc trong tu tập."}, {"w": "Miscellany", "ipa": "/ˈmɪsəleɪni/", "pos": "n.", "meaning": "tập hợp nhiều thứ khác nhau; tạp tập", "example": "A miscellany of short teachings may preserve useful instructions on different aspects of practice.", "note": "Có thể gặp trong tiêu đề sách/chương mang nghĩa 'tạp tập'."}, {"w": "Concise", "ipa": "/kənˈsaɪs/", "pos": "adj.", "meaning": "ngắn gọn; súc tích", "example": "A concise explanation can preserve the essential meaning of a Dhamma passage.", "note": "Cụm: concise explanation/summary/account."}, {"w": "Manifestation", "ipa": "/ˌmænɪfeˈsteɪʃən/", "pos": "n.", "meaning": "sự biểu hiện; hiện tướng", "example": "Restlessness may be understood through its manifestation in an unsettled mind.", "note": "Trong văn phân tích, manifestation có thể chỉ cách một pháp biểu hiện ra."}, {"w": "Proximate", "ipa": "/ˈprɑːksɪmət/", "pos": "adj.", "meaning": "gần; cận; gần nhất", "example": "Abhidhamma manuals often discuss the proximate cause of a mental factor.", "note": "Cụm rất quan trọng: proximate cause = cận nhân."}, {"w": "Bliss", "ipa": "/blɪs/", "pos": "n.", "meaning": "lạc; niềm an lạc sâu sắc", "example": "The bliss of concentration should still be contemplated as conditioned and impermanent.", "note": "Bliss có thể dịch sukha/pīti tùy ngữ cảnh, nên xem thuật ngữ Pāḷi đi kèm."}, {"w": "Speculation", "ipa": "/ˌspekjəˈleɪʃən/", "pos": "n.", "meaning": "sự suy đoán; phỏng đoán", "example": "The Buddha often redirected attention from idle speculation toward direct understanding of suffering.", "note": "Cụm: idle speculation = suy đoán vô ích."}, {"w": "Scenario", "ipa": "/səˈnerioʊ/", "pos": "n.", "meaning": "tình huống; kịch bản giả định", "example": "A teacher may present a scenario to test how a student applies a Dhamma principle.", "note": "Hữu ích trong bài tập tình huống: hypothetical scenario."}, {"w": "Withstand", "ipa": "/wɪðˈstænd/", "pos": "v.", "meaning": "chịu đựng; chống chịu; đứng vững trước", "example": "A well-trained mind can withstand difficult conditions without immediately reacting with aversion.", "note": "Cấu trúc: withstand pressure/pain/difficulty; không cần giới từ sau withstand."}];
+
+function seededRandom(seed) {
+  let t = seed >>> 0;
+  return function() {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ t >>> 15, 1 | t);
+    r ^= r + Math.imul(r ^ r >>> 7, 61 | r);
+    return ((r ^ r >>> 14) >>> 0) / 4294967296;
+  }
+}
+const rand = seededRandom(20260831);
+
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--) {
+    const j=Math.floor(rand()*(i+1)); [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function pickDistractors(correct, field, n=3) {
+  return shuffle(VOCAB.filter(v=>v.w!==correct.w)).slice(0,n).map(v=>v[field]);
+}
+function blankExample(v) {
+  const escaped = v.w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const rx = new RegExp(escaped,'i');
+  if(rx.test(v.example)) return v.example.replace(rx,'_____');
+  return v.example + " [Target: _____]";
+}
+function buildQuestions() {
+  const pool=shuffle(VOCAB);
+  const qs=[];
+  // 45: word -> Vietnamese meaning
+  for(let i=0;i<45;i++) {
+    const v=pool[i%pool.length];
+    qs.push({type:'meaning',v, prompt:`Nghĩa phù hợp nhất của “${v.w}” là gì?`,
+      options:shuffle([v.meaning,...pickDistractors(v,'meaning')]), answer:v.meaning});
+  }
+  // 40: meaning -> word
+  for(let i=0;i<40;i++) {
+    const v=pool[(i+17)%pool.length];
+    qs.push({type:'reverse',v, prompt:`Chọn từ/cụm từ phù hợp với nghĩa: “${v.meaning}”`,
+      options:shuffle([v.w,...pickDistractors(v,'w')]), answer:v.w});
+  }
+  // 45: Buddhist context blank
+  for(let i=0;i<45;i++) {
+    const v=pool[(i+31)%pool.length];
+    qs.push({type:'context',v, prompt:`Điền từ thích hợp vào câu Phật học:\n“${blankExample(v)}”`,
+      options:shuffle([v.w,...pickDistractors(v,'w')]), answer:v.w});
+  }
+  // 35: spelling
+  for(let i=0;i<35;i++) {
+    const v=pool[(i+49)%pool.length];
+    qs.push({type:'spelling',v, prompt:`Nghe 🔊 và gõ chính xác từ/cụm từ. Gợi ý nghĩa: “${v.meaning}”`, answer:v.w});
+  }
+  // 35: true/false = total 200
+  for(let i=0;i<35;i++) {
+    const v=pool[(i+63)%pool.length];
+    const isTrue = i%2===0;
+    const shown = isTrue ? v.meaning : pickDistractors(v,'meaning',1)[0];
+    qs.push({type:'tf',v, prompt:`Đúng hay sai? “${v.w}” có nghĩa là: “${shown}”`,
+      options:['Đúng','Sai'], answer:isTrue?'Đúng':'Sai'});
+  }
+  return shuffle(qs);
+}
+
+let allQuestions=buildQuestions(), activeQuestions=[...allQuestions], index=0, correct=0, wrong=0, wrongQuestions=[], answered=false;
+
+const el=id=>document.getElementById(id);
+const labels={
+  meaning:'Nhận diện nghĩa',
+  reverse:'Nghĩa → từ',
+  context:'Ngữ cảnh Phật học',
+  spelling:'Nghe & chính tả',
+  tf:'Đúng / Sai'
+};
+
+function speak(text) {
+  if(!('speechSynthesis' in window)) {
+    alert('Trình duyệt này chưa hỗ trợ đọc tự động. Hãy thử Chrome hoặc Edge.');
+    return;
+  }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; u.rate=.82; u.pitch=1;
+  const voices=speechSynthesis.getVoices();
+  const preferred=voices.find(v=>/en-US/i.test(v.lang)) || voices.find(v=>/^en/i.test(v.lang));
+  if(preferred) u.voice=preferred;
+  speechSynthesis.speak(u);
+}
+
+function render() {
+  if(index>=activeQuestions.length) return finish();
+  answered=false;
+  el('nextBtn').disabled=true;
+  const q=activeQuestions[index], v=q.v;
+  el('quizCard').style.display='block'; el('endCard').style.display='none';
+  el('qtype').textContent=labels[q.type];
+  el('wordLabel').textContent=(q.type==='spelling' || q.type==='reverse') ? 'Nghe từ' : v.w;
+  el('ipaLabel').textContent=(q.type==='spelling' || q.type==='reverse') ? '' : `${v.ipa} • ${v.pos}`;
+  el('question').textContent=q.prompt;
+  el('feedback').className='feedback'; el('feedback').innerHTML='';
+  el('audioBtn').onclick=()=>speak(v.w);
+  el('counter').textContent=`Câu ${index+1} / ${activeQuestions.length}`;
+  el('score').textContent=`Đúng: ${correct} • Sai: ${wrong}`;
+  el('progress').style.width=`${(index/activeQuestions.length)*100}%`;
+  const area=el('answerArea'); area.innerHTML='';
+
+  if(q.type==='spelling') {
+    const row=document.createElement('div'); row.className='inputrow';
+    const input=document.createElement('input'); input.type='text'; input.placeholder='Gõ câu trả lời...'; input.autocomplete='off';
+    const btn=document.createElement('button'); btn.className='primary'; btn.textContent='Kiểm tra';
+    btn.onclick=()=>checkTyped(input.value,input,btn);
+    input.addEventListener('keydown',e=>{if(e.key==='Enter') btn.click();});
+    row.append(input,btn); area.appendChild(row); input.focus();
+  } else {
+    const box=document.createElement('div'); box.className='options';
+    q.options.forEach(opt=>{
+      const b=document.createElement('button'); b.className='opt'; b.textContent=opt;
+      b.onclick=()=>checkOption(opt,b,box);
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+  }
+}
+
+function normalize(s) {return s.trim().toLowerCase().replace(/\s+/g,' ')}
+
+function markResult(ok) {
+  const q=activeQuestions[index], v=q.v;
+  if(ok) correct++; else {wrong++; wrongQuestions.push(q);}
+  answered=true; el('nextBtn').disabled=false;
+  const f=el('feedback');
+  f.className='feedback show '+(ok?'good':'bad');
+  f.innerHTML=`<div class="answer">${ok?'✓ Chính xác':'✗ Chưa đúng'} — Đáp án: <b>${q.answer}</b></div>
+    <div class="example"><b>Ví dụ Phật học:</b> ${v.example}</div>
+    <div class="note"><b>Ghi chú:</b> ${v.note}</div>
+    <div class="note"><b>IPA:</b> ${v.ipa} &nbsp; • &nbsp; <b>Loại từ:</b> ${v.pos} &nbsp; • &nbsp; <b>Nghĩa:</b> ${v.meaning}</div>`;
+  el('score').textContent=`Đúng: ${correct} • Sai: ${wrong}`;
+}
+
+function checkOption(choice,button,box) {
+  if(answered) return;
+  const q=activeQuestions[index];
+  const ok=normalize(choice)===normalize(q.answer);
+  [...box.children].forEach(b=>{
+    b.disabled=true;
+    if(normalize(b.textContent)===normalize(q.answer)) b.classList.add('correct');
+  });
+  if(!ok) button.classList.add('wrong');
+  markResult(ok);
+}
+
+function checkTyped(value,input,btn) {
+  if(answered) return;
+  const q=activeQuestions[index];
+  const ok=normalize(value)===normalize(q.answer);
+  input.disabled=true; btn.disabled=true;
+  input.style.borderColor=ok?'var(--good)':'var(--bad)';
+  markResult(ok);
+}
+
+function finish() {
+  el('quizCard').style.display='none'; el('endCard').style.display='block';
+  el('progress').style.width='100%';
+  const total=correct+wrong, pct=total?Math.round(correct/total*100):0;
+  el('finalScore').textContent=`${correct} / ${total}`;
+  el('finalText').textContent=`Bạn đạt ${pct}%. Có ${wrongQuestions.length} câu cần ôn lại.`;
+  el('wrongBtn').disabled=wrongQuestions.length===0;
+  el('reviewWrongBtn').disabled=wrongQuestions.length===0;
+}
+
+function startFull() {
+  allQuestions=buildQuestions(); activeQuestions=[...allQuestions]; index=0; correct=0; wrong=0; wrongQuestions=[]; render();
+}
+function reviewWrong() {
+  if(!wrongQuestions.length) return;
+  activeQuestions=shuffle([...wrongQuestions]); index=0; correct=0; wrong=0; wrongQuestions=[]; render();
+}
+el('nextBtn').onclick=()=>{if(answered){index++;render();}};
+el('restartBtn').onclick=startFull; el('againBtn').onclick=startFull;
+el('wrongBtn').onclick=reviewWrong; el('reviewWrongBtn').onclick=reviewWrong;
+
+el('vocabBtn').onclick=()=>{
+  const card=el('vocabCard'); const show=card.style.display==='none';
+  card.style.display=show?'block':'none';
+  el('vocabBtn').textContent=show?'Ẩn danh sách 84 từ':'Xem danh sách 84 từ';
+  if(show && !el('vocabList').innerHTML) {
+    el('vocabList').innerHTML=VOCAB.map((v,i)=>`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+      <b>${i+1}. ${v.w}</b> <span class="small">${v.ipa} • ${v.pos}</span><br>${v.meaning}
+      <button class="audio" style="width:32px;height:32px;margin-left:6px" onclick='speak(${JSON.stringify(v.w)})'>🔊</button>
+    </div>`).join('');
+  }
+};
+
+speechSynthesis?.getVoices();
+render();
+</script>
+</body>
+</html>

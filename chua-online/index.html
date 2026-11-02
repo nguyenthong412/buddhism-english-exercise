@@ -57,7 +57,7 @@ h1{font-family:Georgia,serif;margin:8px 0 6px;font-size:clamp(1.8rem,5vw,2.8rem)
 .banner.show{display:block}
 
 .seats-shell{position:relative;background:linear-gradient(#2a140f,#1b0d09)}
-.seats{height:min(440px,62vh);min-height:260px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#7a4a3a transparent}
+.seats{height:min(480px,64vh);min-height:280px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#7a4a3a transparent}
 .seats-inner{position:relative}
 #seatCanvas{position:sticky;top:0;display:block}
 .gate{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px;background:rgba(27,13,9,.72);backdrop-filter:blur(2px);color:#f3e7cf}
@@ -109,107 +109,170 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </header>
 
   <section class="hall" aria-label="Chánh điện">
-    <svg class="altar" id="altar" viewBox="0 0 800 300" role="img" aria-label="Chánh điện với tượng Phật, đèn nến, lư hương và quả chuông">
+    <svg class="altar" id="altar" viewBox="0 0 800 340" role="img" aria-label="Chánh điện với tượng Phật ngồi thiền, hoa sen, đèn nến, lư hương và quả chuông">
       <defs>
-        <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2018"/><stop offset="1" stop-color="#25110d"/></linearGradient>
-        <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffeaaa" stop-opacity=".95"/><stop offset=".55" stop-color="#f3c969" stop-opacity=".32"/><stop offset="1" stop-color="#f3c969" stop-opacity="0"/></radialGradient>
-        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8de88"/><stop offset=".55" stop-color="#dba843"/><stop offset="1" stop-color="#a67c32"/></linearGradient>
-        <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1b13"/><stop offset="1" stop-color="#2a140f"/></linearGradient>
+        <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4d2119"/><stop offset="1" stop-color="#241009"/></linearGradient>
+        <linearGradient id="niche" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b110b"/><stop offset="1" stop-color="#1c0b07"/></linearGradient>
+        <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff0b8" stop-opacity=".95"/><stop offset=".45" stop-color="#f6cf72" stop-opacity=".42"/><stop offset="1" stop-color="#f6cf72" stop-opacity="0"/></radialGradient>
+        <linearGradient id="goldH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b98a2e"/><stop offset=".25" stop-color="#e9c35f"/><stop offset=".5" stop-color="#fbe9a0"/><stop offset=".75" stop-color="#e2b84e"/><stop offset="1" stop-color="#a97a26"/></linearGradient>
+        <linearGradient id="goldV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8de88"/><stop offset="1" stop-color="#b58a2f"/></linearGradient>
+        <radialGradient id="faceG" cx="50%" cy="42%" r="62%"><stop offset="0" stop-color="#fff0b0"/><stop offset=".6" stop-color="#f1c85e"/><stop offset="1" stop-color="#cf9a35"/></radialGradient>
+        <linearGradient id="petalG" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ee7f9f"/><stop offset=".55" stop-color="#f9c0d0"/><stop offset="1" stop-color="#fff6f8"/></linearGradient>
+        <linearGradient id="petalB" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#d9658a"/><stop offset="1" stop-color="#f6b3c6"/></linearGradient>
+        <pattern id="curls" width="8" height="12" patternUnits="userSpaceOnUse"><rect width="8" height="12" fill="#18234d"/><circle cx="4" cy="3.2" r="3.3" fill="#2f4794" stroke="#111a3d" stroke-width=".8"/><circle cx="3" cy="2.3" r="1" fill="#7f95e0" opacity=".75"/><circle cx="0" cy="9.2" r="3.3" fill="#2f4794" stroke="#111a3d" stroke-width=".8"/><circle cx="8" cy="9.2" r="3.3" fill="#2f4794" stroke="#111a3d" stroke-width=".8"/></pattern>
         <radialGradient id="lampglow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd27a" stop-opacity=".6"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+        <radialGradient id="vignette" cx="50%" cy="45%" r="75%"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient>
+        <path id="petal" d="M0 0 C-15 -10 -16 -34 0 -52 C16 -34 15 -10 0 0Z"/>
       </defs>
 
-      <rect width="800" height="300" fill="url(#wall)"/>
-      <rect y="262" width="800" height="38" fill="url(#floor)"/>
-      <rect y="262" width="800" height="2" fill="#a67c32" opacity=".55"/>
+      <rect width="800" height="340" fill="url(#wall)"/>
+      <!-- ô cửa vòm sau lưng tượng -->
+      <path d="M236 340 L236 128 Q236 26 400 26 Q564 26 564 128 L564 340 Z" fill="url(#niche)" stroke="#a67c32" stroke-width="2" stroke-opacity=".7"/>
+      <path d="M248 340 L248 130 Q248 40 400 40 Q552 40 552 130 L552 340" fill="none" stroke="#a67c32" stroke-width="1" stroke-opacity=".35"/>
       <!-- cột và xà -->
-      <rect x="0" width="50" height="300" fill="#6d211a"/><rect x="750" width="50" height="300" fill="#6d211a"/>
-      <rect x="46" width="4" height="300" fill="#a67c32" opacity=".5"/><rect x="750" width="4" height="300" fill="#a67c32" opacity=".5"/>
+      <rect x="0" width="48" height="340" fill="#6d211a"/><rect x="752" width="48" height="340" fill="#6d211a"/>
+      <rect x="44" width="4" height="340" fill="#a67c32" opacity=".55"/><rect x="752" width="4" height="340" fill="#a67c32" opacity=".55"/>
+      <rect x="0" y="120" width="48" height="5" fill="#a67c32" opacity=".5"/><rect x="752" y="120" width="48" height="5" fill="#a67c32" opacity=".5"/>
       <rect width="800" height="26" fill="#3a1812"/><rect y="24" width="800" height="3" fill="#a67c32" opacity=".7"/>
 
-      <!-- đèn lồng -->
-      <g transform="translate(140 0)"><g class="lantern">
+      <!-- đèn lồng (lớp ngoài định vị, lớp trong đung đưa) -->
+      <g transform="translate(120 0)"><g class="lantern">
         <line x1="0" y1="26" x2="0" y2="52" stroke="#a67c32" stroke-width="2"/>
         <rect x="-18" y="50" width="36" height="6" rx="3" fill="#a67c32"/>
-        <rect x="-20" y="56" width="40" height="46" rx="18" fill="#b8352a"/>
+        <rect x="-20" y="56" width="40" height="48" rx="19" fill="#b8352a"/>
+        <path d="M-12 62 C-4 72 -4 90 -12 100 M12 62 C4 72 4 90 12 100" fill="none" stroke="#e07a52" stroke-width="1.2" opacity=".7"/>
         <rect x="-18" y="102" width="36" height="6" rx="3" fill="#a67c32"/>
         <line x1="0" y1="108" x2="0" y2="130" stroke="#e3b34e" stroke-width="2.5"/>
       </g></g>
-      <g transform="translate(660 0)"><g class="lantern b">
+      <g transform="translate(680 0)"><g class="lantern b">
         <line x1="0" y1="26" x2="0" y2="52" stroke="#a67c32" stroke-width="2"/>
         <rect x="-18" y="50" width="36" height="6" rx="3" fill="#a67c32"/>
-        <rect x="-20" y="56" width="40" height="46" rx="18" fill="#b8352a"/>
+        <rect x="-20" y="56" width="40" height="48" rx="19" fill="#b8352a"/>
+        <path d="M-12 62 C-4 72 -4 90 -12 100 M12 62 C4 72 4 90 12 100" fill="none" stroke="#e07a52" stroke-width="1.2" opacity=".7"/>
         <rect x="-18" y="102" width="36" height="6" rx="3" fill="#a67c32"/>
         <line x1="0" y1="108" x2="0" y2="130" stroke="#e3b34e" stroke-width="2.5"/>
       </g></g>
 
-      <!-- hào quang -->
-      <circle cx="400" cy="128" r="150" fill="url(#halo)"/>
-      <circle cx="400" cy="112" r="80" fill="none" stroke="#f6d77a" stroke-width="1.5" opacity=".45"/>
+      <!-- ánh sáng quanh tượng -->
+      <circle cx="400" cy="124" r="190" fill="url(#halo)"/>
 
-      <!-- toà sen -->
-      <ellipse cx="400" cy="252" rx="142" ry="14" fill="#5a1d16"/>
-      <g fill="#f4bfcc" stroke="#b86a7e" stroke-width="1">
-        <ellipse cx="282" cy="246" rx="19" ry="10" transform="rotate(-12 282 246)"/>
-        <ellipse cx="322" cy="248" rx="21" ry="11" transform="rotate(-6 322 248)"/>
-        <ellipse cx="362" cy="249" rx="21" ry="11"/>
-        <ellipse cx="400" cy="250" rx="22" ry="12"/>
-        <ellipse cx="438" cy="249" rx="21" ry="11"/>
-        <ellipse cx="478" cy="248" rx="21" ry="11" transform="rotate(6 478 248)"/>
-        <ellipse cx="518" cy="246" rx="19" ry="10" transform="rotate(12 518 246)"/>
+      <g id="buddhaVec" transform="translate(0 27)">
+        <!-- hào quang -->
+        <circle cx="400" cy="96" r="112" fill="none" stroke="#f3d27a" stroke-opacity=".55" stroke-width="22" stroke-dasharray="3 8.4"/>
+        <circle cx="400" cy="96" r="97" fill="none" stroke="#f6d77a" stroke-opacity=".75" stroke-width="2.5"/>
+        <circle cx="400" cy="96" r="87" fill="none" stroke="#f6d77a" stroke-opacity=".35" stroke-width="1.2"/>
+
+        <!-- toà sen -->
+        <ellipse cx="400" cy="303" rx="150" ry="7" fill="#8a6526"/>
+        <g fill="url(#petalB)" stroke="#a84868" stroke-width="1.1"><use href="#petal" transform="translate(290 302) rotate(-24) scale(0.78)"/><use href="#petal" transform="translate(322 302) rotate(-15) scale(0.78)"/><use href="#petal" transform="translate(354 302) rotate(-7) scale(0.78)"/><use href="#petal" transform="translate(386 302) rotate(-2) scale(0.78)"/><use href="#petal" transform="translate(414 302) rotate(2) scale(0.78)"/><use href="#petal" transform="translate(446 302) rotate(7) scale(0.78)"/><use href="#petal" transform="translate(478 302) rotate(15) scale(0.78)"/><use href="#petal" transform="translate(510 302) rotate(24) scale(0.78)"/></g>
+        <g fill="url(#petalG)" stroke="#c0587a" stroke-width="1.1"><use href="#petal" transform="translate(272 302) rotate(-28) scale(0.68)"/><use href="#petal" transform="translate(304 302) rotate(-20) scale(0.68)"/><use href="#petal" transform="translate(336 302) rotate(-12) scale(0.68)"/><use href="#petal" transform="translate(368 302) rotate(-5) scale(0.68)"/><use href="#petal" transform="translate(400 302) rotate(0) scale(0.68)"/><use href="#petal" transform="translate(432 302) rotate(5) scale(0.68)"/><use href="#petal" transform="translate(464 302) rotate(12) scale(0.68)"/><use href="#petal" transform="translate(496 302) rotate(20) scale(0.68)"/><use href="#petal" transform="translate(528 302) rotate(28) scale(0.68)"/></g>
+        <ellipse cx="400" cy="264" rx="126" ry="7" fill="#e2b84e" stroke="#8a6526" stroke-width="1.2"/>
+        <!-- chân kiết già -->
+        <path d="M274 266 C268 246 300 226 346 222 L454 222 C500 226 532 246 526 266 Z" fill="url(#goldH)" stroke="#9a6f22" stroke-width="1.2"/>
+        <path d="M400 238 C372 240 338 248 298 262 M400 238 C428 240 462 248 502 262 M400 247 C380 251 356 258 328 266 M400 247 C420 251 444 258 472 266" fill="none" stroke="#a37625" stroke-width="1.6" opacity=".55"/>
+        <ellipse cx="316" cy="247" rx="26" ry="9" fill="#fff3b8" opacity=".3"/><ellipse cx="484" cy="247" rx="26" ry="9" fill="#fff3b8" opacity=".3"/>
+
+        <!-- thân -->
+        <path d="M344 228 C334 190 334 156 350 132 C362 114 382 106 400 106 C418 106 438 114 450 132 C466 156 466 190 456 228 Z" fill="url(#goldH)" stroke="#9a6f22" stroke-width="1.2"/>
+        <path d="M448 130 C462 156 464 192 456 228 L344 228 C348 206 364 178 392 154 C410 140 430 132 448 130Z" fill="#c9962e" opacity=".5"/>
+        <path d="M392 154 C372 176 356 202 348 226 M404 150 C384 176 370 204 366 226 M418 146 C400 172 388 200 386 226 M432 140 C416 168 404 198 402 226" fill="none" stroke="#8a6526" stroke-width="1.5" opacity=".5"/>
+        <ellipse cx="372" cy="136" rx="14" ry="6" fill="#fff6c8" opacity=".4" transform="rotate(-24 372 136)"/>
+        <!-- hai tay -->
+        <path d="M352 136 C340 160 335 196 341 226 C351 231 363 228 371 220 C366 192 368 164 376 144 Z" fill="url(#goldH)" stroke="#9a6f22" stroke-width="1.2"/>
+        <path d="M448 136 C460 160 465 196 459 226 C449 231 437 228 429 220 C434 192 432 164 424 144 Z" fill="url(#goldH)" stroke="#9a6f22" stroke-width="1.2"/>
+        <!-- thiền định ấn -->
+        <path d="M364 224 C372 212 390 208 400 208 C410 208 428 212 436 224 C428 234 410 236 400 236 C390 236 372 234 364 224Z" fill="#f6da7c" stroke="#9a6f22" stroke-width="1.2"/>
+        <path d="M374 226 L387 216 M382 229 L395 219 M426 226 L413 216 M418 229 L405 219" stroke="#a37625" stroke-width="1.3" stroke-linecap="round"/>
+        <ellipse cx="400" cy="211" rx="9" ry="4" fill="#ffe9a0" stroke="#a37625" stroke-width=".9"/>
+
+        <!-- cổ -->
+        <path d="M385 100 L385 116 C392 122 408 122 415 116 L415 100 Z" fill="url(#goldH)" stroke="#9a6f22" stroke-width="1"/>
+        <path d="M388 108 Q400 113 412 108 M389 114 Q400 119 411 114" fill="none" stroke="#a37625" stroke-width="1.2" opacity=".6"/>
+
+        <!-- tai dài -->
+        <path d="M367 76 C359 79 357 92 359 106 C360 112 365 112 367 106 Z" fill="url(#goldH)" stroke="#9a6f22" stroke-width="1.1"/>
+        <path d="M433 76 C441 79 443 92 441 106 C440 112 435 112 433 106 Z" fill="url(#goldH)" stroke="#9a6f22" stroke-width="1.1"/>
+        <!-- mặt -->
+        <path d="M366 76 C366 50 382 38 400 38 C418 38 434 50 434 76 C434 100 420 116 400 116 C380 116 366 100 366 76Z" fill="url(#faceG)" stroke="#9a6f22" stroke-width="1.2"/>
+        <!-- tóc xoắn ốc + nhục kế -->
+        <path d="M380 40 C380 22 388 12 400 12 C412 12 420 22 420 40 Z" fill="url(#curls)" stroke="#111a3d" stroke-width="1"/>
+        <path d="M364 80 C360 48 380 34 400 34 C420 34 440 48 436 80 C428 64 414 56 400 56 C386 56 372 64 364 80Z" fill="url(#curls)" stroke="#111a3d" stroke-width="1"/>
+        <path d="M400 -1 C395 5 395 10 400 13 C405 10 405 5 400 -1Z" fill="#ff8a3d"/><circle cx="400" cy="9" r="2.2" fill="#ffe08a"/>
+        <!-- nét mặt -->
+        <path d="M377 72 Q386 66 395 71 M405 71 Q414 66 423 72" fill="none" stroke="#6b4a1a" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M377 82 Q386 88 395 82 M405 82 Q414 88 423 82" fill="none" stroke="#3a2610" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M377 81 L374 80 M423 81 L426 80" stroke="#3a2610" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M400 80 L398 93 Q400 96 403 93" fill="none" stroke="#b98a2e" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+        <path d="M393 98 Q400 100 407 98" fill="none" stroke="#b98a2e" stroke-width="1.4" stroke-linecap="round" opacity=".7"/>
+        <path d="M389 104 Q400 111 411 104" fill="#c9503f" stroke="#8f2f24" stroke-width="1.4" stroke-linejoin="round"/>
+        <ellipse cx="381" cy="96" rx="6" ry="3.4" fill="#ff9c78" opacity=".28"/><ellipse cx="419" cy="96" rx="6" ry="3.4" fill="#ff9c78" opacity=".28"/>
+        <circle cx="400" cy="66" r="2.8" fill="#ff5a3c"/><circle cx="399.2" cy="65.2" r=".9" fill="#fff"/>
+        <ellipse cx="391" cy="50" rx="8" ry="3" fill="#fff" opacity=".18" transform="rotate(-20 391 50)"/>
       </g>
-      <rect x="298" y="236" width="204" height="14" rx="7" fill="url(#gold)"/>
 
-      <!-- tượng Phật -->
-      <ellipse cx="400" cy="232" rx="102" ry="24" fill="url(#gold)"/>
-      <path d="M340 232 C332 176 346 138 372 126 L428 126 C454 138 468 176 460 232 Z" fill="url(#gold)"/>
-      <path d="M372 128 C392 160 420 190 462 214" fill="none" stroke="#a67c32" stroke-width="2" opacity=".6"/>
-      <path d="M356 160 C362 188 376 210 392 226" fill="none" stroke="#a67c32" stroke-width="1.5" opacity=".4"/>
-      <ellipse cx="400" cy="221" rx="28" ry="10" fill="#efc65f" stroke="#a67c32"/>
-      <rect x="390" y="116" width="20" height="14" fill="#e6b84e"/>
-      <circle cx="400" cy="72" r="11" fill="#efc258"/>
-      <ellipse cx="371" cy="104" rx="5" ry="13" fill="#e6b84e"/><ellipse cx="429" cy="104" rx="5" ry="13" fill="#e6b84e"/>
-      <circle cx="400" cy="100" r="28" fill="#f2c85f"/>
-      <path d="M387 100 q5 4 10 0 M403 100 q5 4 10 0" fill="none" stroke="#6b4a1a" stroke-width="2" stroke-linecap="round"/>
-      <path d="M393 114 q7 4 14 0" fill="none" stroke="#a1392f" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="400" cy="90" r="2.2" fill="#a1392f"/>
+      <!-- hình Phật tải lên (tuỳ chọn, xem CONFIG.BUDDHA_IMAGE) -->
+      <image id="buddhaImg" x="236" y="30" width="328" height="290" preserveAspectRatio="xMidYMax meet" style="display:none"/>
+      <rect width="800" height="26" fill="#3a1812"/><rect y="24" width="800" height="3" fill="#a67c32" opacity=".7"/>
+      <!-- bàn thờ -->
+      <rect x="216" y="318" width="368" height="22" fill="#3d1a12" stroke="#a67c32" stroke-width="1.4"/>
+      <rect x="216" y="318" width="368" height="3" fill="#c79a45" opacity=".8"/>
 
       <!-- nến -->
-      <circle cx="300" cy="210" r="30" fill="url(#lampglow)"/><circle cx="500" cy="210" r="30" fill="url(#lampglow)"/>
+      <circle cx="244" cy="262" r="34" fill="url(#lampglow)"/><circle cx="556" cy="262" r="34" fill="url(#lampglow)"/>
       <g>
-        <rect x="294" y="218" width="12" height="34" rx="2" fill="#f4e6c8"/>
-        <path class="flame" d="M300 200 C294 208 295 217 300 218 C305 217 306 208 300 200 Z" fill="#ffb347"/>
-        <path class="flame" d="M300 207 C297 211 298 216 300 217 C302 216 303 211 300 207 Z" fill="#fff1b8"/>
+        <path d="M236 318 h16 l-2 -10 h-12 z" fill="url(#goldV)"/>
+        <rect x="238" y="272" width="12" height="38" rx="2" fill="#f4e6c8"/><rect x="238" y="272" width="4" height="38" fill="#fff" opacity=".4"/>
+        <path class="flame" d="M244 250 C237 259 238 270 244 271 C250 270 251 259 244 250 Z" fill="#ffb347"/>
+        <path class="flame" d="M244 258 C241 263 242 269 244 270 C246 269 247 263 244 258 Z" fill="#fff1b8"/>
       </g>
       <g>
-        <rect x="494" y="218" width="12" height="34" rx="2" fill="#f4e6c8"/>
-        <path class="flame b" d="M500 200 C494 208 495 217 500 218 C505 217 506 208 500 200 Z" fill="#ffb347"/>
-        <path class="flame b" d="M500 207 C497 211 498 216 500 217 C502 216 503 211 500 207 Z" fill="#fff1b8"/>
+        <path d="M548 318 h16 l-2 -10 h-12 z" fill="url(#goldV)"/>
+        <rect x="550" y="272" width="12" height="38" rx="2" fill="#f4e6c8"/><rect x="550" y="272" width="4" height="38" fill="#fff" opacity=".4"/>
+        <path class="flame b" d="M556 250 C549 259 550 270 556 271 C562 270 563 259 556 250 Z" fill="#ffb347"/>
+        <path class="flame b" d="M556 258 C553 263 554 269 556 270 C558 269 559 263 556 258 Z" fill="#fff1b8"/>
+      </g>
+
+      <!-- bình hoa sen -->
+      <g>
+        <path d="M168 318 C160 308 160 292 170 286 L190 286 C200 292 200 308 192 318 Z" fill="#2f5f7a" stroke="#a67c32" stroke-width="1.2"/>
+        <rect x="167" y="283" width="26" height="5" rx="2.5" fill="#a67c32"/>
+        <path d="M180 284 C178 262 174 250 168 236 M180 284 C182 266 190 252 200 240" fill="none" stroke="#3f8a4d" stroke-width="2.4" stroke-linecap="round"/>
+        <g transform="translate(168 236)"><use href="#petal" transform="rotate(-38) scale(.55)" fill="url(#petalB)" stroke="#a84868"/><use href="#petal" transform="rotate(38) scale(.55)" fill="url(#petalB)" stroke="#a84868"/><use href="#petal" transform="rotate(-16) scale(.6)" fill="url(#petalG)" stroke="#c0587a"/><use href="#petal" transform="rotate(16) scale(.6)" fill="url(#petalG)" stroke="#c0587a"/><use href="#petal" transform="scale(.64)" fill="url(#petalG)" stroke="#c0587a"/></g>
+        <g transform="translate(200 240)"><use href="#petal" transform="rotate(-20) scale(.4)" fill="url(#petalG)" stroke="#c0587a"/><use href="#petal" transform="rotate(20) scale(.4)" fill="url(#petalG)" stroke="#c0587a"/><use href="#petal" transform="scale(.44)" fill="url(#petalG)" stroke="#c0587a"/></g>
+      </g>
+      <g transform="translate(800 0) scale(-1 1)">
+        <path d="M168 318 C160 308 160 292 170 286 L190 286 C200 292 200 308 192 318 Z" fill="#2f5f7a" stroke="#a67c32" stroke-width="1.2"/>
+        <rect x="167" y="283" width="26" height="5" rx="2.5" fill="#a67c32"/>
+        <path d="M180 284 C178 262 174 250 168 236 M180 284 C182 266 190 252 200 240" fill="none" stroke="#3f8a4d" stroke-width="2.4" stroke-linecap="round"/>
+        <g transform="translate(168 236)"><use href="#petal" transform="rotate(-38) scale(.55)" fill="url(#petalB)" stroke="#a84868"/><use href="#petal" transform="rotate(38) scale(.55)" fill="url(#petalB)" stroke="#a84868"/><use href="#petal" transform="rotate(-16) scale(.6)" fill="url(#petalG)" stroke="#c0587a"/><use href="#petal" transform="rotate(16) scale(.6)" fill="url(#petalG)" stroke="#c0587a"/><use href="#petal" transform="scale(.64)" fill="url(#petalG)" stroke="#c0587a"/></g>
+        <g transform="translate(200 240)"><use href="#petal" transform="rotate(-20) scale(.4)" fill="url(#petalG)" stroke="#c0587a"/><use href="#petal" transform="rotate(20) scale(.4)" fill="url(#petalG)" stroke="#c0587a"/><use href="#petal" transform="scale(.44)" fill="url(#petalG)" stroke="#c0587a"/></g>
       </g>
 
       <!-- chuông -->
       <g id="bell">
-        <line x1="715" y1="26" x2="715" y2="66" stroke="#a67c32" stroke-width="3"/>
-        <circle cx="715" cy="66" r="5" fill="#a67c32"/>
-        <path d="M697 112 C697 90 703 76 715 74 C727 76 733 90 733 112 Z" fill="url(#gold)" stroke="#8a6526" stroke-width="1.5"/>
-        <rect x="694" y="110" width="42" height="6" rx="3" fill="#a67c32"/>
-        <circle cx="715" cy="122" r="5" fill="#8a6526"/>
+        <line x1="715" y1="26" x2="715" y2="70" stroke="#a67c32" stroke-width="3"/>
+        <circle cx="715" cy="70" r="5" fill="#a67c32"/>
+        <path d="M696 118 C696 94 703 80 715 78 C727 80 734 94 734 118 Z" fill="url(#goldH)" stroke="#8a6526" stroke-width="1.5"/>
+        <path d="M704 92 C702 102 702 110 703 116" stroke="#fff6c8" stroke-width="2" opacity=".6" fill="none" stroke-linecap="round"/>
+        <rect x="693" y="116" width="44" height="6" rx="3" fill="#a67c32"/>
+        <circle cx="715" cy="128" r="5" fill="#8a6526"/>
       </g>
-      <circle class="ring" id="ring1" cx="715" cy="112" r="10"/>
-      <circle class="ring b" id="ring2" cx="715" cy="112" r="10"/>
+      <circle class="ring" id="ring1" cx="715" cy="118" r="10"/>
+      <circle class="ring b" id="ring2" cx="715" cy="118" r="10"/>
 
       <!-- lư hương -->
-      <path d="M374 272 h52 l-7 20 h-38 z" fill="url(#gold)" stroke="#8a6526" stroke-width="1.5"/>
-      <rect x="370" y="268" width="60" height="7" rx="3.5" fill="#d9a441" stroke="#8a6526"/>
-      <rect x="380" y="290" width="6" height="5" fill="#8a6526"/><rect x="414" y="290" width="6" height="5" fill="#8a6526"/>
+      <path d="M372 318 h56 l-7 18 h-42 z" fill="url(#goldH)" stroke="#8a6526" stroke-width="1.5"/>
+      <rect x="368" y="313" width="64" height="8" rx="4" fill="#d9a441" stroke="#8a6526"/>
       <g class="sticks">
-        <line x1="391" y1="268" x2="391" y2="240" stroke="#7a4a2a" stroke-width="2"/>
-        <line x1="400" y1="268" x2="400" y2="236" stroke="#7a4a2a" stroke-width="2"/>
-        <line x1="409" y1="268" x2="409" y2="240" stroke="#7a4a2a" stroke-width="2"/>
-        <circle cx="391" cy="240" r="2.4" fill="#ff7a3a"/><circle cx="400" cy="236" r="2.4" fill="#ff7a3a"/><circle cx="409" cy="240" r="2.4" fill="#ff7a3a"/>
+        <line x1="390" y1="313" x2="390" y2="282" stroke="#7a4a2a" stroke-width="2"/>
+        <line x1="400" y1="313" x2="400" y2="276" stroke="#7a4a2a" stroke-width="2"/>
+        <line x1="410" y1="313" x2="410" y2="282" stroke="#7a4a2a" stroke-width="2"/>
+        <circle cx="390" cy="282" r="2.6" fill="#ff7a3a"/><circle cx="400" cy="276" r="2.6" fill="#ff7a3a"/><circle cx="410" cy="282" r="2.6" fill="#ff7a3a"/>
       </g>
       <g class="smoke">
-        <circle cx="391" cy="238" r="5"/><circle cx="400" cy="234" r="5"/><circle cx="409" cy="238" r="5"/><circle cx="396" cy="236" r="4"/><circle cx="405" cy="236" r="4"/>
+        <circle cx="390" cy="280" r="5"/><circle cx="400" cy="274" r="5"/><circle cx="410" cy="280" r="5"/><circle cx="395" cy="277" r="4"/><circle cx="405" cy="277" r="4"/>
       </g>
+      <rect width="800" height="340" fill="url(#vignette)" pointer-events="none"/>
     </svg>
 
     <div class="banner" id="banner" role="status"></div>
@@ -248,11 +311,15 @@ button:disabled{opacity:.5;cursor:not-allowed}
    SERVER_URL : ""      → chế độ demo, chạy ngay trên hosting tĩnh (người ngồi cạnh là mô phỏng)
                 "auto"  → máy chủ cùng địa chỉ với trang (khi chạy bằng server/server.js)
                 "wss://ten-mien-cua-ban.com" → máy chủ riêng (người thật nhìn thấy nhau)
+   BUDDHA_IMAGE : đường dẫn hình tượng Phật của bạn (PNG/WebP/SVG, nền trong suốt) — thay hình vẽ sẵn
+   MONK_IMAGE   : đường dẫn hình một nhân vật ngồi nhìn thẳng (PNG/WebP, nền trong suốt) — thay hình vẽ sẵn
    ===================================================================== */
 const CONFIG = Object.assign({
   SERVER_URL: "",
-  DEMO_SEATS: 120,     // số chỗ ngồi trong chế độ demo
-  BOWS_PER_ROUND: 108  // số lạy mỗi vòng
+  DEMO_SEATS: 120,      // số chỗ ngồi trong chế độ demo
+  BOWS_PER_ROUND: 108,  // số lạy mỗi vòng
+  BUDDHA_IMAGE: "",     // ví dụ "img/phat.png"
+  MONK_IMAGE: ""        // ví dụ "img/nguoi.png"
 }, window.CHUA_ONLINE_CONFIG || {});
 
 (() => {
@@ -268,6 +335,18 @@ const el = {
 };
 const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ctx = el.canvas.getContext("2d");
+
+// Hình tượng Phật riêng (tuỳ chọn): chỉ thay khi tải thành công, nếu lỗi vẫn giữ hình vẽ sẵn
+if (CONFIG.BUDDHA_IMAGE) {
+  const probe = new Image();
+  probe.onload = () => {
+    const img = $("buddhaImg");
+    img.setAttribute("href", CONFIG.BUDDHA_IMAGE);
+    img.style.display = "inline";
+    $("buddhaVec").style.display = "none";
+  };
+  probe.src = CONFIG.BUDDHA_IMAGE;
+}
 
 /* ---------- Trạng thái ---------- */
 const S = {
@@ -327,15 +406,34 @@ function playTok() {
 }
 
 /* ---------- Vẽ chỗ ngồi (canvas, chỉ vẽ phần đang nhìn thấy nên 10.000 chỗ vẫn mượt) ---------- */
-const hall = { cell: 56, pad: 14, cols: 1, rows: 1, offX: 0, dpr: 1, W: 0, H: 0 };
-const ROBES = ["#e9c46a", "#f4d58d", "#e8b04a", "#f2c879", "#e6a93f", "#9b3a2e"];
+const hall = { cell: 64, pad: 14, cols: 1, rows: 1, offX: 0, dpr: 1, W: 0, H: 0 };
+const TAU = Math.PI * 2;
+const SKINS = ["#f7cfa6", "#eab183", "#cf935f", "#f2bd95"];
+const MONK_CLOTH = [["#ec9f2f", "#bf7418"], ["#f4c04a", "#c99320"], ["#c4532f", "#8e3320"], ["#e08a2e", "#ad6218"], ["#9a6a3f", "#6c4526"]];
+const LAY_CLOTH = [["#7e8c99", "#586573"], ["#8d7b66", "#665643"], ["#6f8a8c", "#4d6466"]]; // áo lam của cư sĩ
+const looks = new Map();
+function look(idx) {
+  let L = looks.get(idx);
+  if (L) return L;
+  let h = Math.imul(idx + 1, 2654435761) >>> 0; h ^= h >>> 15; h = Math.imul(h, 2246822519) >>> 0; h ^= h >>> 13; h >>>= 0;
+  const lay = h % 7 === 0, set = lay ? LAY_CLOTH : MONK_CLOTH;
+  L = { lay, skin: SKINS[(h >>> 3) % SKINS.length], cloth: set[(h >>> 6) % set.length],
+        openEyes: (h >>> 9) % 4 === 0, beads: !lay && (h >>> 11) % 3 === 0, phase: ((h >>> 13) % 628) / 100 };
+  looks.set(idx, L);
+  return L;
+}
+
+// Hình riêng (tuỳ chọn): xem CONFIG.MONK_IMAGE
+const monkImg = new Image();
+let monkImgOk = false;
+if (CONFIG.MONK_IMAGE) { monkImg.onload = () => { monkImgOk = true; requestDraw(); }; monkImg.src = CONFIG.MONK_IMAGE; }
 
 function layout() {
   const W = el.wrap.clientWidth, H = el.wrap.clientHeight;
   if (!W || !H) return;
   hall.W = W; hall.H = H;
   hall.dpr = Math.min(window.devicePixelRatio || 1, 2);
-  hall.cell = W < 520 ? 46 : 56;
+  hall.cell = W < 520 ? 52 : 64;
   hall.cols = Math.max(1, Math.floor((W - hall.pad * 2) / hall.cell));
   hall.rows = Math.ceil(S.total / hall.cols);
   hall.offX = (W - hall.cols * hall.cell) / 2;
@@ -355,51 +453,150 @@ function bowAmount(idx, now) {
   return Math.sin(Math.PI * p);
 }
 
+// Nhân vật nhỏ nhìn thẳng ra: đầu tròn, mắt nhắm mỉm cười, chắp tay, ngồi trên đệm
+function drawFigure(L, mine, bow, u, now) {
+  const t = reduced ? 0 : now;
+  const cloth = mine ? ["#ffd24d", "#d9a21c"] : L.cloth;
+  ctx.lineJoin = "round"; ctx.lineCap = "round";
+
+  // --- thân, tay áo, hai bàn tay chắp (co lại khi lạy) ---
+  ctx.save();
+  ctx.scale(1 + .05 * bow, 1 - .2 * bow + Math.sin(t / 1100 + L.phase) * .012);
+  ctx.beginPath();
+  ctx.moveTo(-24 * u, 3 * u);
+  ctx.bezierCurveTo(-27 * u, -8 * u, -18 * u, -19 * u, -12 * u, -23 * u);
+  ctx.quadraticCurveTo(0, -26 * u, 12 * u, -23 * u);
+  ctx.bezierCurveTo(18 * u, -19 * u, 27 * u, -8 * u, 24 * u, 3 * u);
+  ctx.quadraticCurveTo(0, 8 * u, -24 * u, 3 * u);
+  ctx.closePath();
+  ctx.fillStyle = cloth[0]; ctx.fill();
+  ctx.strokeStyle = cloth[1]; ctx.lineWidth = 1.4 * u; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-19 * u, 0); ctx.quadraticCurveTo(0, 5 * u, 19 * u, 0); ctx.stroke();
+
+  ctx.fillStyle = L.lay ? "#f3ead6" : L.skin;                       // cổ áo chữ V
+  ctx.beginPath(); ctx.moveTo(-6.5 * u, -23.5 * u); ctx.lineTo(0, -13 * u); ctx.lineTo(6.5 * u, -23.5 * u); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = cloth[1]; ctx.lineWidth = 1.3 * u;
+  ctx.beginPath(); ctx.moveTo(-6.5 * u, -23.5 * u); ctx.lineTo(3 * u, -11 * u); ctx.moveTo(6.5 * u, -23.5 * u); ctx.lineTo(-3 * u, -11 * u); ctx.stroke();
+
+  if (L.beads) {                                                    // chuỗi hạt
+    ctx.save();
+    ctx.strokeStyle = "#5e3217"; ctx.lineWidth = 2.2 * u; ctx.setLineDash([1.8 * u, 1.5 * u]);
+    ctx.beginPath(); ctx.moveTo(-7.5 * u, -22 * u); ctx.quadraticCurveTo(0, -2 * u, 7.5 * u, -22 * u); ctx.stroke();
+    ctx.restore();
+  }
+  ctx.strokeStyle = cloth[1]; ctx.lineWidth = 9.6 * u;              // tay áo
+  ctx.beginPath(); ctx.moveTo(-14 * u, -19 * u); ctx.lineTo(-3.5 * u, -8.5 * u); ctx.moveTo(14 * u, -19 * u); ctx.lineTo(3.5 * u, -8.5 * u); ctx.stroke();
+  ctx.strokeStyle = cloth[0]; ctx.lineWidth = 7.8 * u;
+  ctx.beginPath(); ctx.moveTo(-14 * u, -19 * u); ctx.lineTo(-3.5 * u, -8.5 * u); ctx.moveTo(14 * u, -19 * u); ctx.lineTo(3.5 * u, -8.5 * u); ctx.stroke();
+  ctx.fillStyle = L.skin;                                           // hai bàn tay chắp
+  ctx.beginPath(); ctx.ellipse(0, -9.5 * u, 3.5 * u, 5.4 * u, 0, 0, TAU); ctx.fill();
+  ctx.strokeStyle = "rgba(120,60,20,.45)"; ctx.lineWidth = .9 * u;
+  ctx.beginPath(); ctx.moveTo(0, -14 * u); ctx.lineTo(0, -5 * u); ctx.stroke();
+  ctx.restore();
+
+  // --- đầu (nghiêng nhẹ, nhấp nhô theo nhịp thở, cúi xuống khi lạy) ---
+  const hy = -34 * u + 10 * u * bow + Math.sin(t / 1300 + L.phase) * .7 * u, hs = 1 - .1 * bow, r = 11.5 * u;
+  ctx.save();
+  ctx.translate(0, hy); ctx.scale(hs, hs); ctx.rotate(Math.sin(t / 2300 + L.phase) * .045);
+  if (L.lay) { ctx.fillStyle = "#2b1f1a"; ctx.beginPath(); ctx.arc(0, -12.5 * u, 4.6 * u, 0, TAU); ctx.fill(); } // búi tóc
+  ctx.fillStyle = L.skin;
+  ctx.beginPath(); ctx.arc(-11.2 * u, 1.5 * u, 2.9 * u, 0, TAU); ctx.arc(11.2 * u, 1.5 * u, 2.9 * u, 0, TAU); ctx.fill(); // tai
+  ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.fill();
+  ctx.strokeStyle = "rgba(120,60,20,.22)"; ctx.lineWidth = u; ctx.stroke();
+  if (L.lay) {                                                      // tóc mái
+    ctx.fillStyle = "#2b1f1a";
+    ctx.beginPath(); ctx.arc(0, 0, r + .5 * u, Math.PI * 1.03, Math.PI * 1.97);
+    ctx.quadraticCurveTo(0, -.22 * r, -r * .99, -.13 * r); ctx.closePath(); ctx.fill();
+  } else {
+    ctx.fillStyle = "rgba(255,255,255,.3)";
+    ctx.beginPath(); ctx.ellipse(-3.6 * u, -6.6 * u, 3.7 * u, 2.2 * u, -.5, 0, TAU); ctx.fill();
+  }
+  ctx.fillStyle = "rgba(236,112,104,.4)";                           // má hồng
+  ctx.beginPath(); ctx.ellipse(-6.8 * u, 4.4 * u, 2.5 * u, 1.7 * u, 0, 0, TAU); ctx.ellipse(6.8 * u, 4.4 * u, 2.5 * u, 1.7 * u, 0, 0, TAU); ctx.fill();
+  const blink = ((t / 1000 + L.phase * 1.7) % 5.5) < .14, ex = 4.5 * u, ey = 1.8 * u;
+  if (L.openEyes && !blink && bow < .2) {
+    ctx.fillStyle = "#2a1a10";
+    ctx.beginPath(); ctx.ellipse(-ex, ey, 1.5 * u, 1.95 * u, 0, 0, TAU); ctx.ellipse(ex, ey, 1.5 * u, 1.95 * u, 0, 0, TAU); ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.beginPath(); ctx.arc(-ex - .45 * u, ey - .7 * u, .55 * u, 0, TAU); ctx.arc(ex - .45 * u, ey - .7 * u, .55 * u, 0, TAU); ctx.fill();
+  } else {
+    ctx.strokeStyle = "#3b2414"; ctx.lineWidth = 1.35 * u;
+    ctx.beginPath(); ctx.arc(-ex, ey - .9 * u, 2.1 * u, .15 * Math.PI, .85 * Math.PI); ctx.stroke();
+    ctx.beginPath(); ctx.arc(ex, ey - .9 * u, 2.1 * u, .15 * Math.PI, .85 * Math.PI); ctx.stroke();
+  }
+  ctx.strokeStyle = "#9b4437"; ctx.lineWidth = 1.15 * u;            // nụ cười
+  ctx.beginPath(); ctx.arc(0, 4.3 * u, 2.3 * u, .2 * Math.PI, .8 * Math.PI); ctx.stroke();
+  ctx.restore();
+}
+
 function drawSeat(x, y, idx, now) {
-  const u = hall.cell / 56, occ = S.seats[idx] === 1, mine = idx === S.me;
-  const base = y + 17 * u;
-  ctx.fillStyle = occ ? "#7d2c22" : "rgba(255,255,255,.07)";
-  ctx.beginPath(); ctx.ellipse(x, base + u, 21 * u, 8 * u, 0, 0, Math.PI * 2); ctx.fill();
+  const u = hall.cell / 64, occ = S.seats[idx] === 1, mine = idx === S.me;
+  const base = y + 20 * u;
+  ctx.fillStyle = occ ? "#8a3226" : "rgba(255,255,255,.07)";        // đệm ngồi
+  ctx.beginPath(); ctx.ellipse(x, base + 2 * u, 26 * u, 9 * u, 0, 0, TAU); ctx.fill();
   if (!occ) return;
-  ctx.strokeStyle = "rgba(230,190,100,.5)"; ctx.lineWidth = u; ctx.stroke();
+  ctx.strokeStyle = "rgba(235,195,105,.55)"; ctx.lineWidth = u; ctx.stroke();
 
   if (mine) {
+    const g = ctx.createRadialGradient(x, base - 18 * u, 2 * u, x, base - 18 * u, 40 * u);
+    g.addColorStop(0, "rgba(255,214,120,.5)"); g.addColorStop(1, "rgba(255,214,120,0)");
+    ctx.fillStyle = g; ctx.fillRect(x - 42 * u, base - 62 * u, 84 * u, 84 * u);
     const pulse = reduced ? .8 : .6 + .3 * Math.sin(now / 420);
     ctx.save();
     ctx.shadowColor = "rgba(255,210,110,.9)"; ctx.shadowBlur = 14 * u;
     ctx.strokeStyle = "rgba(255,214,120," + pulse + ")"; ctx.lineWidth = 2.2 * u;
-    ctx.beginPath(); ctx.ellipse(x, base + u, 25 * u, 10.5 * u, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(x, base + 2 * u, 30 * u, 11.5 * u, 0, 0, TAU); ctx.stroke();
     ctx.restore();
   }
 
   const bow = bowAmount(idx, now);
-  const breath = reduced ? 0 : Math.sin(now / 900 + idx * 1.7) * .6 * u;
   ctx.save();
   ctx.translate(x, base);
-  ctx.scale(1 + .05 * bow, 1 - .22 * bow);
-  ctx.fillStyle = mine ? "#ffd966" : ROBES[(idx * 2654435761 >>> 0) % ROBES.length];
-  ctx.beginPath();
-  ctx.moveTo(-17 * u, 0);
-  ctx.quadraticCurveTo(-19 * u, -16 * u, -9 * u, -20 * u);
-  ctx.lineTo(9 * u, -20 * u);
-  ctx.quadraticCurveTo(19 * u, -16 * u, 17 * u, 0);
-  ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = "rgba(90,40,10,.35)"; ctx.lineWidth = 1.2 * u;
-  ctx.beginPath(); ctx.moveTo(-9 * u, -19 * u); ctx.quadraticCurveTo(2 * u, -10 * u, 12 * u, -2 * u); ctx.stroke();
-  ctx.fillStyle = "#f0a35e";
-  ctx.beginPath(); ctx.arc(0, -27 * u + breath, 9.5 * u, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = "rgba(255,255,255,.28)";
-  ctx.beginPath(); ctx.ellipse(-3 * u, -31 * u + breath, 3.5 * u, 2.2 * u, -.5, 0, Math.PI * 2); ctx.fill();
+  if (monkImgOk) {                                                  // dùng hình riêng nếu có
+    const w = 60 * u, h = w * (monkImg.naturalHeight / monkImg.naturalWidth);
+    ctx.scale(1 + .05 * bow, 1 - .2 * bow);
+    ctx.drawImage(monkImg, -w / 2, -h + 4 * u, w, h);
+  } else {
+    drawFigure(look(idx), mine, bow, u, now);
+  }
   ctx.restore();
 
   if (mine) {
-    const fs = Math.max(10, 10.5 * u), label = "Bạn", ly = y - 25 * u;
+    const fs = Math.max(10, 10.5 * u), label = "Bạn", ly = y - 30 * u;
     ctx.font = "700 " + fs + "px Inter,Arial,sans-serif";
     const w = ctx.measureText(label).width + 12, h = fs + 5;
     ctx.fillStyle = "#e0b24a";
     ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x - w / 2, ly - h / 2, w, h, h / 2) : ctx.rect(x - w / 2, ly - h / 2, w, h); ctx.fill();
     ctx.fillStyle = "#2c241b"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
     ctx.fillText(label, x, ly + .5);
+  }
+}
+
+// tia sáng vàng bay lên mỗi khi có người lạy
+const sparks = [];
+function spark(idx, now) {
+  if (reduced) return;
+  if (sparks.length > 80) sparks.shift();
+  sparks.push({ idx, t0: now || performance.now() });
+}
+function diamond(x, y, s) {
+  ctx.beginPath();
+  ctx.moveTo(x, y - s); ctx.lineTo(x + s * .32, y); ctx.lineTo(x, y + s); ctx.lineTo(x - s * .32, y); ctx.closePath();
+  ctx.moveTo(x - s, y); ctx.lineTo(x, y + s * .32); ctx.lineTo(x + s, y); ctx.lineTo(x, y - s * .32); ctx.closePath();
+  ctx.fill();
+}
+function drawSparks(now, st) {
+  const u = hall.cell / 64;
+  for (let i = sparks.length - 1; i >= 0; i--) {
+    const sp = sparks[i], a = (now - sp.t0) / 1100;
+    if (a >= 1) { sparks.splice(i, 1); continue; }
+    const cx = hall.offX + (sp.idx % hall.cols) * hall.cell + hall.cell / 2;
+    const cy = hall.pad + Math.floor(sp.idx / hall.cols) * hall.cell + hall.cell / 2 - st - 22 * u;
+    ctx.fillStyle = "rgba(255,224,130," + ((1 - a) * .95).toFixed(3) + ")";
+    for (let k = 0; k < 5; k++) {
+      const ang = -Math.PI / 2 + (k - 2) * .55, d = (10 + 28 * a) * u;
+      diamond(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d, (4.6 * (1 - a) + 1.2) * u);
+    }
   }
 }
 
@@ -411,6 +608,9 @@ function draw(now) {
   const st = el.wrap.scrollTop, c = hall.cell;
   const r0 = Math.max(0, Math.floor((st - hall.pad) / c));
   const r1 = Math.min(hall.rows - 1, Math.ceil((st + hall.H - hall.pad) / c));
+  for (let r = r0; r <= r1; r++) {                                  // dải sàn gỗ nhạt xen kẽ
+    if (r % 2 === 0) { ctx.fillStyle = "rgba(255,255,255,.022)"; ctx.fillRect(0, hall.pad + r * c - st, hall.W, c); }
+  }
   for (let r = r0; r <= r1; r++) {
     for (let col = 0; col < hall.cols; col++) {
       const idx = r * hall.cols + col;
@@ -418,6 +618,7 @@ function draw(now) {
       drawSeat(hall.offX + col * c + c / 2, hall.pad + r * c + c / 2 - st, idx, now);
     }
   }
+  drawSparks(now, st);
 }
 
 let loopOn = false, drawQueued = false;
@@ -514,7 +715,9 @@ const handlers = {
   onDelta(d) {
     (d.l || []).forEach((i) => setSeat(i, 0));
     (d.j || []).forEach((i) => setSeat(i, 1));
-    (d.b || []).forEach((i) => { if (isSeat(i) && S.seats[i] === 1 && i !== S.me && !reduced) bowAnim.set(i, performance.now()); });
+    (d.b || []).forEach((i) => {
+      if (isSeat(i) && S.seats[i] === 1 && i !== S.me && !reduced) { const n = performance.now(); bowAnim.set(i, n); spark(i, n); }
+    });
     refreshStats(); requestDraw();
   },
   onLost() { say("Mất kết nối, đang thử lại…"); },
@@ -627,7 +830,8 @@ function bow() {
   if (S.me < 0 || now - S.lastBow < 450) return;
   S.lastBow = now;
   S.bows++;
-  bowAnim.set(S.me, performance.now());
+  const t = performance.now();
+  bowAnim.set(S.me, t); spark(S.me, t);
   playTok();
   presence && presence.bow();
   refreshBows(); requestDraw();

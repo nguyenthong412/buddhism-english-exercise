@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chùa Online — Ngồi yên cùng nhau</title>
+<meta name="description" content="Chùa online: bước vào chánh điện, chọn một chỗ ngồi, lạy Phật, thắp hương, thỉnh chuông và ngồi yên cùng mọi người. Không chat, không nhắn tin.">
+<style>
+:root {
+  --bg:#f6f3eb; --card:#fdfbf7; --ink:#2c241b; --muted:#756b5f;
+  --accent:#8b2b22; --accent2:#6d211a; --border:#d4cbb8; --soft:#efe8dc; --gold:#a67c32;
+  --hall-top:#3a1812; --hall-floor:#2a140f;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif;line-height:1.55}
+.wrap{max-width:920px;margin:0 auto;padding:28px 16px 56px}
+
+/* ---------- Tiêu đề ---------- */
+.hero{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:26px 28px;box-shadow:0 12px 30px rgba(60,40,20,.08);position:relative;overflow:hidden}
+.hero:before{content:"🪷";position:absolute;right:22px;top:16px;font-size:34px;opacity:.75}
+.kicker{letter-spacing:.16em;color:var(--accent);font-weight:800;font-size:.78rem}
+h1{font-family:Georgia,serif;margin:8px 0 6px;font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.1}
+.sub{color:var(--muted);max-width:720px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.pill{background:var(--soft);border:1px solid var(--border);padding:7px 12px;border-radius:999px;font-size:.9rem;white-space:nowrap}
+.pill.mode{background:#fff7e0;border-color:#e3cf94}
+.pill.mode.live{background:#eaf5ec;border-color:#a9cfb1;color:#2e6b3e}
+
+/* ---------- Chánh điện ---------- */
+.hall{margin-top:18px;border-radius:22px;overflow:hidden;border:1px solid #1d0e0a;box-shadow:0 14px 34px rgba(40,20,10,.28);background:var(--hall-floor);position:relative}
+.altar{display:block;width:100%;height:auto}
+.altar .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick 1.3s ease-in-out infinite alternate}
+.altar .flame.b{animation-delay:.5s;animation-duration:1.7s}
+@keyframes flick{from{transform:scale(1,1) rotate(-2deg);opacity:.95}to{transform:scale(.88,1.12) rotate(2.5deg);opacity:1}}
+.altar .lantern{transform-box:fill-box;transform-origin:50% 0;animation:sway 6s ease-in-out infinite alternate}
+.altar .lantern.b{animation-delay:-3s}
+@keyframes sway{from{transform:rotate(-2.2deg)}to{transform:rotate(2.2deg)}}
+.altar .sticks,.altar .smoke{display:none}
+.altar.incense-on .sticks,.altar.incense-on .smoke{display:inline}
+.smoke circle{fill:rgba(255,255,255,.3);opacity:0;transform-box:fill-box;transform-origin:center}
+.altar.incense-on .smoke circle{animation:rise 5s ease-out infinite}
+.smoke circle:nth-child(1){--dx:-14px;animation-delay:0s}
+.smoke circle:nth-child(2){--dx:10px;animation-delay:1s}
+.smoke circle:nth-child(3){--dx:-6px;animation-delay:2s}
+.smoke circle:nth-child(4){--dx:16px;animation-delay:3s}
+.smoke circle:nth-child(5){--dx:-10px;animation-delay:4s}
+@keyframes rise{0%{transform:translate(0,0) scale(.35);opacity:0}15%{opacity:.55}100%{transform:translate(var(--dx),-80px) scale(2.8);opacity:0}}
+#bell{transform-box:view-box;transform-origin:715px 28px}
+#bell.swing{animation:swing 2.8s ease-out}
+@keyframes swing{0%{transform:rotate(0)}12%{transform:rotate(11deg)}28%{transform:rotate(-8deg)}44%{transform:rotate(5deg)}60%{transform:rotate(-3deg)}80%{transform:rotate(1.2deg)}100%{transform:rotate(0)}}
+.ring{fill:none;stroke:#f6d77a;stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center}
+.ring.go{animation:ring 1.8s ease-out}
+.ring.go.b{animation-delay:.35s}
+@keyframes ring{0%{transform:scale(.4);opacity:.85}100%{transform:scale(7);opacity:0}}
+
+.banner{display:none;background:#fff3d6;color:#5a3d0a;border-bottom:1px solid #e3cf94;padding:9px 16px;font-size:.92rem;text-align:center}
+.banner.show{display:block}
+
+.seats-shell{position:relative;background:linear-gradient(#2a140f,#1b0d09)}
+.seats{height:min(440px,62vh);min-height:260px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#7a4a3a transparent}
+.seats-inner{position:relative}
+#seatCanvas{position:sticky;top:0;display:block}
+.gate{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px;background:rgba(27,13,9,.72);backdrop-filter:blur(2px);color:#f3e7cf}
+.gate.hide{display:none}
+.gate p{margin:0;max-width:430px;font-size:.95rem;color:#e6d6b6}
+.gate .big{font-family:Georgia,serif;font-size:1.35rem;color:#fff}
+
+/* ---------- Nút ---------- */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0;align-items:center}
+button{font:inherit;border:none;border-radius:12px;padding:10px 15px;cursor:pointer;transition:.15s}
+button:hover:not(:disabled){transform:translateY(-1px)}
+button:focus-visible{outline:3px solid #d9a441;outline-offset:2px}
+.primary{background:var(--accent);color:#fff}
+.primary:hover:not(:disabled){background:var(--accent2)}
+.secondary{background:var(--card);border:1px solid var(--border);color:var(--ink)}
+.secondary[aria-pressed="true"]{background:#fff3d6;border-color:#d9a441}
+button:disabled{opacity:.5;cursor:not-allowed}
+.count{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:rgba(255,255,255,.2);font-variant-numeric:tabular-nums;font-size:.88em}
+.spacer{flex:1}
+.gate .primary{font-size:1.05rem;padding:12px 24px}
+
+.note{color:var(--muted);font-size:.9rem;margin:14px 2px 0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#2c241b;color:#fff;padding:10px 18px;border-radius:999px;font-size:.95rem;opacity:0;pointer-events:none;transition:.3s;max-width:calc(100vw - 32px);text-align:center;z-index:5}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (max-width:560px){
+  .hero{padding:22px 18px}
+  .toolbar button{flex:1 1 auto}
+  .spacer{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">CHÙA ONLINE</div>
+    <h1>Ngồi yên cùng nhau</h1>
+    <p class="sub">Không trò chuyện, không nhắn tin. Chọn một chỗ trong chánh điện, thở chậm lại, lạy vài lạy, thắp một nén hương — và ngồi yên.</p>
+    <div class="stats">
+      <span class="pill" id="pillSeated">🧘 Đang ngồi: —</span>
+      <span class="pill" id="pillTime">⏱ Bạn chưa vào chùa</span>
+      <span class="pill mode" id="pillMode">Chưa kết nối</span>
+    </div>
+  </header>
+
+  <section class="hall" aria-label="Chánh điện">
+    <svg class="altar" id="altar" viewBox="0 0 800 300" role="img" aria-label="Chánh điện với tượng Phật, đèn nến, lư hương và quả chuông">
+      <defs>
+        <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2018"/><stop offset="1" stop-color="#25110d"/></linearGradient>
+        <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffeaaa" stop-opacity=".95"/><stop offset=".55" stop-color="#f3c969" stop-opacity=".32"/><stop offset="1" stop-color="#f3c969" stop-opacity="0"/></radialGradient>
+        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8de88"/><stop offset=".55" stop-color="#dba843"/><stop offset="1" stop-color="#a67c32"/></linearGradient>
+        <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1b13"/><stop offset="1" stop-color="#2a140f"/></linearGradient>
+        <radialGradient id="lampglow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd27a" stop-opacity=".6"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+      </defs>
+
+      <rect width="800" height="300" fill="url(#wall)"/>
+      <rect y="262" width="800" height="38" fill="url(#floor)"/>
+      <rect y="262" width="800" height="2" fill="#a67c32" opacity=".55"/>
+      <!-- cột và xà -->
+      <rect x="0" width="50" height="300" fill="#6d211a"/><rect x="750" width="50" height="300" fill="#6d211a"/>
+      <rect x="46" width="4" height="300" fill="#a67c32" opacity=".5"/><rect x="750" width="4" height="300" fill="#a67c32" opacity=".5"/>
+      <rect width="800" height="26" fill="#3a1812"/><rect y="24" width="800" height="3" fill="#a67c32" opacity=".7"/>
+
+      <!-- đèn lồng -->
+      <g transform="translate(140 0)"><g class="lantern">
+        <line x1="0" y1="26" x2="0" y2="52" stroke="#a67c32" stroke-width="2"/>
+        <rect x="-18" y="50" width="36" height="6" rx="3" fill="#a67c32"/>
+        <rect x="-20" y="56" width="40" height="46" rx="18" fill="#b8352a"/>
+        <rect x="-18" y="102" width="36" height="6" rx="3" fill="#a67c32"/>
+        <line x1="0" y1="108" x2="0" y2="130" stroke="#e3b34e" stroke-width="2.5"/>
+      </g></g>
+      <g transform="translate(660 0)"><g class="lantern b">
+        <line x1="0" y1="26" x2="0" y2="52" stroke="#a67c32" stroke-width="2"/>
+        <rect x="-18" y="50" width="36" height="6" rx="3" fill="#a67c32"/>
+        <rect x="-20" y="56" width="40" height="46" rx="18" fill="#b8352a"/>
+        <rect x="-18" y="102" width="36" height="6" rx="3" fill="#a67c32"/>
+        <line x1="0" y1="108" x2="0" y2="130" stroke="#e3b34e" stroke-width="2.5"/>
+      </g></g>
+
+      <!-- hào quang -->
+      <circle cx="400" cy="128" r="150" fill="url(#halo)"/>
+      <circle cx="400" cy="112" r="80" fill="none" stroke="#f6d77a" stroke-width="1.5" opacity=".45"/>
+
+      <!-- toà sen -->
+      <ellipse cx="400" cy="252" rx="142" ry="14" fill="#5a1d16"/>
+      <g fill="#f4bfcc" stroke="#b86a7e" stroke-width="1">
+        <ellipse cx="282" cy="246" rx="19" ry="10" transform="rotate(-12 282 246)"/>
+        <ellipse cx="322" cy="248" rx="21" ry="11" transform="rotate(-6 322 248)"/>
+        <ellipse cx="362" cy="249" rx="21" ry="11"/>
+        <ellipse cx="400" cy="250" rx="22" ry="12"/>
+        <ellipse cx="438" cy="249" rx="21" ry="11"/>
+        <ellipse cx="478" cy="248" rx="21" ry="11" transform="rotate(6 478 248)"/>
+        <ellipse cx="518" cy="246" rx="19" ry="10" transform="rotate(12 518 246)"/>
+      </g>
+      <rect x="298" y="236" width="204" height="14" rx="7" fill="url(#gold)"/>
+
+      <!-- tượng Phật -->
+      <ellipse cx="400" cy="232" rx="102" ry="24" fill="url(#gold)"/>
+      <path d="M340 232 C332 176 346 138 372 126 L428 126 C454 138 468 176 460 232 Z" fill="url(#gold)"/>
+      <path d="M372 128 C392 160 420 190 462 214" fill="none" stroke="#a67c32" stroke-width="2" opacity=".6"/>
+      <path d="M356 160 C362 188 376 210 392 226" fill="none" stroke="#a67c32" stroke-width="1.5" opacity=".4"/>
+      <ellipse cx="400" cy="221" rx="28" ry="10" fill="#efc65f" stroke="#a67c32"/>
+      <rect x="390" y="116" width="20" height="14" fill="#e6b84e"/>
+      <circle cx="400" cy="72" r="11" fill="#efc258"/>
+      <ellipse cx="371" cy="104" rx="5" ry="13" fill="#e6b84e"/><ellipse cx="429" cy="104" rx="5" ry="13" fill="#e6b84e"/>
+      <circle cx="400" cy="100" r="28" fill="#f2c85f"/>
+      <path d="M387 100 q5 4 10 0 M403 100 q5 4 10 0" fill="none" stroke="#6b4a1a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M393 114 q7 4 14 0" fill="none" stroke="#a1392f" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="400" cy="90" r="2.2" fill="#a1392f"/>
+
+      <!-- nến -->
+      <circle cx="300" cy="210" r="30" fill="url(#lampglow)"/><circle cx="500" cy="210" r="30" fill="url(#lampglow)"/>
+      <g>
+        <rect x="294" y="218" width="12" height="34" rx="2" fill="#f4e6c8"/>
+        <path class="flame" d="M300 200 C294 208 295 217 300 218 C305 217 306 208 300 200 Z" fill="#ffb347"/>
+        <path class="flame" d="M300 207 C297 211 298 216 300 217 C302 216 303 211 300 207 Z" fill="#fff1b8"/>
+      </g>
+      <g>
+        <rect x="494" y="218" width="12" height="34" rx="2" fill="#f4e6c8"/>
+        <path class="flame b" d="M500 200 C494 208 495 217 500 218 C505 217 506 208 500 200 Z" fill="#ffb347"/>
+        <path class="flame b" d="M500 207 C497 211 498 216 500 217 C502 216 503 211 500 207 Z" fill="#fff1b8"/>
+      </g>
+
+      <!-- chuông -->
+      <g id="bell">
+        <line x1="715" y1="26" x2="715" y2="66" stroke="#a67c32" stroke-width="3"/>
+        <circle cx="715" cy="66" r="5" fill="#a67c32"/>
+        <path d="M697 112 C697 90 703 76 715 74 C727 76 733 90 733 112 Z" fill="url(#gold)" stroke="#8a6526" stroke-width="1.5"/>
+        <rect x="694" y="110" width="42" height="6" rx="3" fill="#a67c32"/>
+        <circle cx="715" cy="122" r="5" fill="#8a6526"/>
+      </g>
+      <circle class="ring" id="ring1" cx="715" cy="112" r="10"/>
+      <circle class="ring b" id="ring2" cx="715" cy="112" r="10"/>
+
+      <!-- lư hương -->
+      <path d="M374 272 h52 l-7 20 h-38 z" fill="url(#gold)" stroke="#8a6526" stroke-width="1.5"/>
+      <rect x="370" y="268" width="60" height="7" rx="3.5" fill="#d9a441" stroke="#8a6526"/>
+      <rect x="380" y="290" width="6" height="5" fill="#8a6526"/><rect x="414" y="290" width="6" height="5" fill="#8a6526"/>
+      <g class="sticks">
+        <line x1="391" y1="268" x2="391" y2="240" stroke="#7a4a2a" stroke-width="2"/>
+        <line x1="400" y1="268" x2="400" y2="236" stroke="#7a4a2a" stroke-width="2"/>
+        <line x1="409" y1="268" x2="409" y2="240" stroke="#7a4a2a" stroke-width="2"/>
+        <circle cx="391" cy="240" r="2.4" fill="#ff7a3a"/><circle cx="400" cy="236" r="2.4" fill="#ff7a3a"/><circle cx="409" cy="240" r="2.4" fill="#ff7a3a"/>
+      </g>
+      <g class="smoke">
+        <circle cx="391" cy="238" r="5"/><circle cx="400" cy="234" r="5"/><circle cx="409" cy="238" r="5"/><circle cx="396" cy="236" r="4"/><circle cx="405" cy="236" r="4"/>
+      </g>
+    </svg>
+
+    <div class="banner" id="banner" role="status"></div>
+
+    <div class="seats-shell">
+      <div class="seats" id="seatsWrap">
+        <div class="seats-inner" id="seatsInner">
+          <canvas id="seatCanvas" role="img" aria-label="Các chỗ ngồi trong chánh điện"></canvas>
+        </div>
+      </div>
+      <div class="gate" id="gate">
+        <div class="big">Bước vào chánh điện</div>
+        <p>Bạn sẽ được xếp một chỗ ngồi. Ở đây không có chat — chỉ có sự yên lặng được chia sẻ.</p>
+        <button class="primary" id="btnEnter" type="button">🙏 Vào chùa</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="toolbar" role="group" aria-label="Hành động trong chùa">
+    <button class="primary" id="btnBow" type="button" disabled>🙏 Lạy Phật <span class="count" id="bowCount">0/108</span></button>
+    <button class="secondary" id="btnIncense" type="button" aria-pressed="false" disabled>🪔 Thắp hương</button>
+    <button class="secondary" id="btnBell" type="button" disabled>🔔 Thỉnh chuông</button>
+    <span class="spacer"></span>
+    <button class="secondary" id="btnSound" type="button" aria-pressed="true">🔊 Âm thanh</button>
+    <button class="secondary" id="btnLeave" type="button" disabled>Rời chùa</button>
+  </div>
+  <p class="note" id="note"></p>
+
+  <div class="toast" id="toast" aria-hidden="true"></div>
+  <div class="sr" id="status" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+/* =====================================================================
+   CẤU HÌNH — sửa ở đây (hoặc đặt window.CHUA_ONLINE_CONFIG trước thẻ script này)
+   SERVER_URL : ""      → chế độ demo, chạy ngay trên hosting tĩnh (người ngồi cạnh là mô phỏng)
+                "auto"  → máy chủ cùng địa chỉ với trang (khi chạy bằng server/server.js)
+                "wss://ten-mien-cua-ban.com" → máy chủ riêng (người thật nhìn thấy nhau)
+   ===================================================================== */
+const CONFIG = Object.assign({
+  SERVER_URL: "",
+  DEMO_SEATS: 120,     // số chỗ ngồi trong chế độ demo
+  BOWS_PER_ROUND: 108  // số lạy mỗi vòng
+}, window.CHUA_ONLINE_CONFIG || {});
+
+(() => {
+"use strict";
+
+const $ = (id) => document.getElementById(id);
+const el = {
+  altar:$("altar"), wrap:$("seatsWrap"), inner:$("seatsInner"), canvas:$("seatCanvas"), gate:$("gate"),
+  banner:$("banner"), btnEnter:$("btnEnter"), btnBow:$("btnBow"), btnIncense:$("btnIncense"),
+  btnBell:$("btnBell"), btnSound:$("btnSound"), btnLeave:$("btnLeave"),
+  bowCount:$("bowCount"), pillSeated:$("pillSeated"), pillTime:$("pillTime"), pillMode:$("pillMode"),
+  note:$("note"), toast:$("toast"), status:$("status"), bell:$("bell"), ring1:$("ring1"), ring2:$("ring2")
+};
+const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ctx = el.canvas.getContext("2d");
+
+/* ---------- Trạng thái ---------- */
+const S = {
+  total: CONFIG.DEMO_SEATS, seats: new Uint8Array(CONFIG.DEMO_SEATS), occupied: 0,
+  me: -1, joined: false, waiting: false, mode: "idle",  // idle | demo | demo-fallback | live
+  bows: 0, lastBow: 0, sitSince: 0, sound: true, incense: false
+};
+const bowAnim = new Map();
+let presence = null;
+
+try { if (localStorage.getItem("chuaOnline.sound") === "off") S.sound = false; } catch (e) {}
+
+/* ---------- Thông báo ---------- */
+let toastT = 0;
+function say(msg) {
+  el.status.textContent = msg;
+  el.toast.textContent = msg;
+  el.toast.classList.add("show");
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.toast.classList.remove("show"), 4200);
+}
+
+/* ---------- Âm thanh (tạo bằng WebAudio, không cần file) ---------- */
+let actx = null;
+function audio() {
+  if (!S.sound) return null;
+  try {
+    if (!actx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; actx = new AC(); }
+    if (actx.state === "suspended") actx.resume();
+    return actx;
+  } catch (e) { return null; }
+}
+function playBell() {
+  const a = audio(); if (!a) return;
+  const t = a.currentTime, master = a.createGain();
+  master.gain.setValueAtTime(0.0001, t);
+  master.gain.exponentialRampToValueAtTime(0.5, t + 0.01);
+  master.gain.exponentialRampToValueAtTime(0.0001, t + 6);
+  master.connect(a.destination);
+  [[1, 1], [2.01, .5], [2.76, .35], [4.07, .2], [5.4, .12]].forEach(([ratio, gain], i) => {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = "sine"; o.frequency.value = 196 * ratio;
+    g.gain.setValueAtTime(gain, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 6 / (1 + i * .6));
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + 6.1);
+  });
+}
+function playTok() {
+  const a = audio(); if (!a) return;
+  const t = a.currentTime, o = a.createOscillator(), g = a.createGain();
+  o.type = "sine";
+  o.frequency.setValueAtTime(260, t); o.frequency.exponentialRampToValueAtTime(110, t + .12);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.35, t + .005);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + .2);
+  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + .22);
+}
+
+/* ---------- Vẽ chỗ ngồi (canvas, chỉ vẽ phần đang nhìn thấy nên 10.000 chỗ vẫn mượt) ---------- */
+const hall = { cell: 56, pad: 14, cols: 1, rows: 1, offX: 0, dpr: 1, W: 0, H: 0 };
+const ROBES = ["#e9c46a", "#f4d58d", "#e8b04a", "#f2c879", "#e6a93f", "#9b3a2e"];
+
+function layout() {
+  const W = el.wrap.clientWidth, H = el.wrap.clientHeight;
+  if (!W || !H) return;
+  hall.W = W; hall.H = H;
+  hall.dpr = Math.min(window.devicePixelRatio || 1, 2);
+  hall.cell = W < 520 ? 46 : 56;
+  hall.cols = Math.max(1, Math.floor((W - hall.pad * 2) / hall.cell));
+  hall.rows = Math.ceil(S.total / hall.cols);
+  hall.offX = (W - hall.cols * hall.cell) / 2;
+  el.inner.style.height = Math.max(H, hall.rows * hall.cell + hall.pad * 2) + "px";
+  el.canvas.width = Math.round(W * hall.dpr);
+  el.canvas.height = Math.round(H * hall.dpr);
+  el.canvas.style.width = W + "px";
+  el.canvas.style.height = H + "px";
+  requestDraw();
+}
+
+function bowAmount(idx, now) {
+  const t0 = bowAnim.get(idx);
+  if (t0 === undefined) return 0;
+  const p = (now - t0) / 950;
+  if (p >= 1) { bowAnim.delete(idx); return 0; }
+  return Math.sin(Math.PI * p);
+}
+
+function drawSeat(x, y, idx, now) {
+  const u = hall.cell / 56, occ = S.seats[idx] === 1, mine = idx === S.me;
+  const base = y + 17 * u;
+  ctx.fillStyle = occ ? "#7d2c22" : "rgba(255,255,255,.07)";
+  ctx.beginPath(); ctx.ellipse(x, base + u, 21 * u, 8 * u, 0, 0, Math.PI * 2); ctx.fill();
+  if (!occ) return;
+  ctx.strokeStyle = "rgba(230,190,100,.5)"; ctx.lineWidth = u; ctx.stroke();
+
+  if (mine) {
+    const pulse = reduced ? .8 : .6 + .3 * Math.sin(now / 420);
+    ctx.save();
+    ctx.shadowColor = "rgba(255,210,110,.9)"; ctx.shadowBlur = 14 * u;
+    ctx.strokeStyle = "rgba(255,214,120," + pulse + ")"; ctx.lineWidth = 2.2 * u;
+    ctx.beginPath(); ctx.ellipse(x, base + u, 25 * u, 10.5 * u, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
+
+  const bow = bowAmount(idx, now);
+  const breath = reduced ? 0 : Math.sin(now / 900 + idx * 1.7) * .6 * u;
+  ctx.save();
+  ctx.translate(x, base);
+  ctx.scale(1 + .05 * bow, 1 - .22 * bow);
+  ctx.fillStyle = mine ? "#ffd966" : ROBES[(idx * 2654435761 >>> 0) % ROBES.length];
+  ctx.beginPath();
+  ctx.moveTo(-17 * u, 0);
+  ctx.quadraticCurveTo(-19 * u, -16 * u, -9 * u, -20 * u);
+  ctx.lineTo(9 * u, -20 * u);
+  ctx.quadraticCurveTo(19 * u, -16 * u, 17 * u, 0);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = "rgba(90,40,10,.35)"; ctx.lineWidth = 1.2 * u;
+  ctx.beginPath(); ctx.moveTo(-9 * u, -19 * u); ctx.quadraticCurveTo(2 * u, -10 * u, 12 * u, -2 * u); ctx.stroke();
+  ctx.fillStyle = "#f0a35e";
+  ctx.beginPath(); ctx.arc(0, -27 * u + breath, 9.5 * u, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,.28)";
+  ctx.beginPath(); ctx.ellipse(-3 * u, -31 * u + breath, 3.5 * u, 2.2 * u, -.5, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+
+  if (mine) {
+    const fs = Math.max(10, 10.5 * u), label = "Bạn", ly = y - 25 * u;
+    ctx.font = "700 " + fs + "px Inter,Arial,sans-serif";
+    const w = ctx.measureText(label).width + 12, h = fs + 5;
+    ctx.fillStyle = "#e0b24a";
+    ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x - w / 2, ly - h / 2, w, h, h / 2) : ctx.rect(x - w / 2, ly - h / 2, w, h); ctx.fill();
+    ctx.fillStyle = "#2c241b"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(label, x, ly + .5);
+  }
+}
+
+function draw(now) {
+  if (!hall.W) return;
+  now = now || performance.now();
+  ctx.setTransform(hall.dpr, 0, 0, hall.dpr, 0, 0);
+  ctx.clearRect(0, 0, hall.W, hall.H);
+  const st = el.wrap.scrollTop, c = hall.cell;
+  const r0 = Math.max(0, Math.floor((st - hall.pad) / c));
+  const r1 = Math.min(hall.rows - 1, Math.ceil((st + hall.H - hall.pad) / c));
+  for (let r = r0; r <= r1; r++) {
+    for (let col = 0; col < hall.cols; col++) {
+      const idx = r * hall.cols + col;
+      if (idx >= S.total) break;
+      drawSeat(hall.offX + col * c + c / 2, hall.pad + r * c + c / 2 - st, idx, now);
+    }
+  }
+}
+
+let loopOn = false, drawQueued = false;
+function frame(now) { draw(now); if (!reduced) requestAnimationFrame(frame); }
+function requestDraw() {
+  if (!reduced) { if (!loopOn) { loopOn = true; requestAnimationFrame(frame); } return; }
+  if (!drawQueued) { drawQueued = true; requestAnimationFrame((t) => { drawQueued = false; draw(t); }); }
+}
+el.wrap.addEventListener("scroll", requestDraw, { passive: true });
+if (window.ResizeObserver) new ResizeObserver(layout).observe(el.wrap); else window.addEventListener("resize", layout);
+
+/* ---------- Cập nhật giao diện ---------- */
+function refreshStats() {
+  el.pillSeated.textContent = S.joined ? "🧘 Đang ngồi: " + S.occupied.toLocaleString("vi-VN") + "/" + S.total.toLocaleString("vi-VN") : "🧘 Đang ngồi: —";
+  el.canvas.setAttribute("aria-label", "Chánh điện: " + S.occupied + " trên " + S.total + " chỗ đã có người ngồi");
+}
+function refreshTimer() {
+  if (!S.joined) { el.pillTime.textContent = "⏱ Bạn chưa vào chùa"; return; }
+  if (S.me < 0) { el.pillTime.textContent = "⏳ Đang chờ chỗ trống"; return; }
+  const s = Math.floor((Date.now() - S.sitSince) / 1000);
+  el.pillTime.textContent = "⏱ Đã ngồi yên " + String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+}
+function refreshMode() {
+  const m = el.pillMode;
+  m.classList.toggle("live", S.mode === "live");
+  m.textContent = { idle: "Chưa kết nối", demo: "Chế độ demo", "demo-fallback": "Demo (không nối được máy chủ)", live: "Trực tuyến" }[S.mode];
+  el.note.textContent = (S.mode === "demo" || S.mode === "demo-fallback")
+    ? "Đây là bản demo: những người ngồi cạnh bạn là mô phỏng, không phải người thật."
+    : S.mode === "live" ? "Mỗi hình nhỏ là một người đang ngồi thật. Lạy Phật sẽ làm hình của bạn cúi xuống cho mọi người thấy." : "";
+}
+function refreshControls() {
+  const seated = S.joined && S.me >= 0;
+  el.btnBow.disabled = !seated;
+  el.btnIncense.disabled = !S.joined;
+  el.btnBell.disabled = !S.joined;
+  el.btnLeave.disabled = !S.joined;
+  el.gate.classList.toggle("hide", S.joined);
+  el.btnSound.setAttribute("aria-pressed", String(S.sound));
+  el.btnSound.textContent = S.sound ? "🔊 Âm thanh" : "🔇 Âm thanh";
+  el.banner.classList.toggle("show", S.joined && S.waiting);
+  if (S.waiting) el.banner.textContent = "Chùa đang kín chỗ. Bạn đang đứng ở sân chùa và sẽ tự có chỗ ngồi khi có người rời đi.";
+  refreshBows(); refreshStats(); refreshTimer(); refreshMode();
+}
+function refreshBows() {
+  const n = CONFIG.BOWS_PER_ROUND, round = Math.floor(S.bows / n), inRound = S.bows - round * n;
+  const shown = S.bows > 0 && inRound === 0 ? n : inRound;
+  el.bowCount.textContent = shown + "/" + n + (round > 0 && !(inRound === 0) ? " · vòng " + (round + 1) : "");
+}
+
+/* ---------- Phần trình bày dữ liệu chỗ ngồi ---------- */
+const isSeat = (v) => Number.isInteger(v) && v >= 0 && v < S.total;
+function setSeat(i, val) {
+  if (!isSeat(i)) return;
+  const was = S.seats[i];
+  if (was === val) return;
+  S.seats[i] = val; S.occupied += val ? 1 : -1;
+}
+function applyState(m) {
+  const total = Math.max(1, Math.min(20000, m.total | 0));
+  S.total = total; S.seats = new Uint8Array(total); S.occupied = 0;
+  (m.occupied || []).forEach((i) => setSeat(i, 1));
+  S.waiting = false;
+  if (isSeat(m.seat)) { S.me = m.seat; setSeat(m.seat, 1); if (!S.sitSince) S.sitSince = Date.now(); }
+  else { S.me = -1; S.waiting = true; }
+  layout(); refreshControls();
+  if (S.me >= 0) scrollToMe(true);
+}
+function scrollToMe(first) {
+  if (S.me < 0) return;
+  const row = Math.floor(S.me / hall.cols);
+  const target = Math.max(0, hall.pad + row * hall.cell - hall.H / 2 + hall.cell / 2);
+  el.wrap.scrollTo({ top: target, behavior: first || reduced ? "auto" : "smooth" });
+  requestDraw();
+}
+function describeSeat() {
+  const row = Math.floor(S.me / hall.cols) + 1, col = (S.me % hall.cols) + 1;
+  return "hàng " + row + ", chỗ " + col;
+}
+
+const handlers = {
+  onState(m) {
+    const hadSeat = S.me >= 0;
+    applyState(m);
+    if (S.me >= 0 && !hadSeat) say("Bạn đã ngồi ở " + describeSeat() + ". Hít vào… thở ra…");
+    if (S.me < 0) say("Chùa đang kín chỗ — bạn đã vào hàng chờ.");
+  },
+  onSeat(seat) {
+    if (!isSeat(seat)) return;
+    S.me = seat; S.waiting = false; setSeat(seat, 1);
+    if (!S.sitSince) S.sitSince = Date.now();
+    refreshControls(); scrollToMe(false);
+    say("Đã có chỗ cho bạn ở " + describeSeat() + ".");
+  },
+  onDelta(d) {
+    (d.l || []).forEach((i) => setSeat(i, 0));
+    (d.j || []).forEach((i) => setSeat(i, 1));
+    (d.b || []).forEach((i) => { if (isSeat(i) && S.seats[i] === 1 && i !== S.me && !reduced) bowAnim.set(i, performance.now()); });
+    refreshStats(); requestDraw();
+  },
+  onLost() { say("Mất kết nối, đang thử lại…"); },
+  onGiveUp() { switchToDemo("demo-fallback"); }
+};
+
+/* ---------- Nguồn dữ liệu 1: demo (mô phỏng) ---------- */
+function demoPresence(h) {
+  const total = CONFIG.DEMO_SEATS, occ = new Set();
+  let timer = 0, mine = -1, stopped = false;
+  const rnd = (n) => Math.floor(Math.random() * n);
+  const pickOcc = () => { const a = [...occ].filter((i) => i !== mine); return a.length ? a[rnd(a.length)] : -1; };
+  function tick() {
+    if (stopped) return;
+    const r = Math.random();
+    if (r < .55) { const i = pickOcc(); if (i >= 0) h.onDelta({ b: [i] }); }
+    else if (r < .78 && occ.size < total * .7) {
+      for (let k = 0; k < 20; k++) { const i = rnd(total); if (!occ.has(i)) { occ.add(i); h.onDelta({ j: [i] }); break; } }
+    } else if (occ.size > total * .3) { const i = pickOcc(); if (i >= 0) { occ.delete(i); h.onDelta({ l: [i] }); } }
+    timer = setTimeout(tick, 700 + Math.random() * 1700);
+  }
+  return {
+    start() {
+      const n = Math.round(total * .45);
+      while (occ.size < n) occ.add(rnd(total));
+      let s = 0; while (occ.has(s)) s++;
+      occ.add(s); mine = s;
+      h.onState({ total, occupied: [...occ], seat: mine });
+      timer = setTimeout(tick, 1200);
+    },
+    bow() {},
+    stop() { stopped = true; clearTimeout(timer); }
+  };
+}
+
+/* ---------- Nguồn dữ liệu 2: máy chủ WebSocket thật ---------- */
+function livePresence(h, url) {
+  let ws = null, stopped = false, tries = 0, retryT = 0, everOpen = false;
+  function connect() {
+    try { ws = new WebSocket(url); } catch (e) { return fail(); }
+    ws.onopen = () => { tries = 0; everOpen = true; };
+    ws.onmessage = (ev) => {
+      let m; try { m = JSON.parse(ev.data); } catch (e) { return; }
+      if (!m || typeof m !== "object") return;
+      if (m.t === "state" && Array.isArray(m.occupied)) h.onState(m);
+      else if (m.t === "seat") h.onSeat(m.seat);
+      else if (m.t === "delta") h.onDelta(m);
+    };
+    ws.onclose = () => { if (!stopped) fail(); };
+    ws.onerror = () => {};
+  }
+  function fail() {
+    if (stopped) return;
+    if (!everOpen && tries >= 2) { stopped = true; return h.onGiveUp(); }
+    if (++tries > 6) { stopped = true; return h.onGiveUp(); }
+    h.onLost();
+    retryT = setTimeout(connect, Math.min(8000, 700 * Math.pow(2, tries)));
+  }
+  return {
+    start: connect,
+    bow() { if (ws && ws.readyState === 1) ws.send('{"t":"bow"}'); },
+    stop() { stopped = true; clearTimeout(retryT); if (ws) { ws.onclose = null; ws.close(); } }
+  };
+}
+
+function resolveServerUrl() {
+  const u = CONFIG.SERVER_URL;
+  if (!u) return "";
+  if (u === "auto") return (location.protocol === "https:" ? "wss://" : "ws://") + location.host;
+  return /^wss?:\/\//.test(u) ? u : "";
+}
+
+/* ---------- Vào / rời chùa ---------- */
+function resetSeats(total) {
+  S.total = total; S.seats = new Uint8Array(total); S.occupied = 0; S.me = -1; S.waiting = false; S.sitSince = 0;
+  bowAnim.clear();
+}
+function enter(forceDemo) {
+  const url = forceDemo ? "" : resolveServerUrl();
+  resetSeats(url ? S.total : CONFIG.DEMO_SEATS);
+  S.joined = true;
+  S.mode = url ? "live" : (forceDemo ? "demo-fallback" : "demo");
+  presence = url ? livePresence(handlers, url) : demoPresence(handlers);
+  layout(); refreshControls();
+  presence.start();
+  audio(); // mở âm thanh ngay trong lần bấm đầu tiên
+}
+function leave() {
+  if (presence) presence.stop();
+  presence = null;
+  S.joined = false; S.mode = "idle";
+  resetSeats(CONFIG.DEMO_SEATS);
+  setIncense(false);
+  layout(); refreshControls();
+  say("Bạn đã rời chùa. Hẹn gặp lại.");
+}
+function switchToDemo(mode) {
+  if (presence) presence.stop();
+  resetSeats(CONFIG.DEMO_SEATS);
+  S.mode = mode;
+  presence = demoPresence(handlers);
+  layout(); refreshControls();
+  presence.start();
+  say("Không nối được máy chủ — chuyển sang chế độ demo.");
+}
+
+/* ---------- Hành động ---------- */
+function bow() {
+  const now = Date.now();
+  if (S.me < 0 || now - S.lastBow < 450) return;
+  S.lastBow = now;
+  S.bows++;
+  bowAnim.set(S.me, performance.now());
+  playTok();
+  presence && presence.bow();
+  refreshBows(); requestDraw();
+  if (S.bows % CONFIG.BOWS_PER_ROUND === 0) say("Đủ " + CONFIG.BOWS_PER_ROUND + " lạy. Nam mô Bổn Sư Thích Ca Mâu Ni Phật 🙏");
+}
+function setIncense(on) {
+  S.incense = on;
+  el.altar.classList.toggle("incense-on", on);
+  el.btnIncense.setAttribute("aria-pressed", String(on));
+  el.btnIncense.textContent = on ? "🪔 Tắt hương" : "🪔 Thắp hương";
+}
+function ringBell() {
+  playBell();
+  [el.bell, el.ring1, el.ring2].forEach((n) => n.classList.remove("swing", "go"));
+  void el.bell.getBoundingClientRect(); // khởi động lại hoạt ảnh
+  el.bell.classList.add("swing"); el.ring1.classList.add("go"); el.ring2.classList.add("go");
+}
+
+el.btnEnter.addEventListener("click", () => enter(false));
+el.btnLeave.addEventListener("click", leave);
+el.btnBow.addEventListener("click", bow);
+el.btnBell.addEventListener("click", ringBell);
+el.btnIncense.addEventListener("click", () => { setIncense(!S.incense); if (S.incense) say("Một nén hương đã được thắp. Tâm hương một nén…"); });
+el.btnSound.addEventListener("click", () => {
+  S.sound = !S.sound;
+  try { localStorage.setItem("chuaOnline.sound", S.sound ? "on" : "off"); } catch (e) {}
+  refreshControls();
+});
+
+setInterval(refreshTimer, 1000);
+layout(); refreshControls();
+})();
+</script>
+</body>
+</html>
